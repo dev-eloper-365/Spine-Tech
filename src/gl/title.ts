@@ -243,6 +243,8 @@ export function createTitle(title: HTMLElement, host: HTMLElement) {
     ctx.fillRect(0, 0, box.w, box.h);
     const cs = getComputedStyle(title);
     ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    // match the DOM's tracking (Geist display uses negative letter-spacing)
+    (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = cs.letterSpacing === 'normal' ? '0px' : cs.letterSpacing;
     ctx.fillStyle = '#000';
     ctx.textBaseline = 'alphabetic';
     title.querySelectorAll<HTMLElement>('.line').forEach((line) => {

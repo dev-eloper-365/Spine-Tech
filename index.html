@@ -6,7 +6,6 @@
   <title>Spine Tech — Hardware, Software &amp; AI Integration</title>
   <meta name="description" content="Spine Tech solves hardware and software problems for companies and agencies, and connects organizations with AI-driven workflows." />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="preload" href="/fonts/Respira-Black.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
   <!-- Brand mark (original): a stylized spine — three vertebrae on one axis -->
@@ -167,24 +166,31 @@
 
   <!-- 7. Footer -->
   <footer class="footer" id="contact">
-    <div class="foot-top">
-      <h2 class="display h-xl reveal">Let's Connect!</h2>
-      <div class="spinner foot-spinner" data-text="WE REALLY LOVE CONNECTING! "></div>
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h4 class="foot-label">Navigation</h4>
+        <a href="#work" class="foot-link">Projects</a>
+        <a href="#services" class="foot-link">Services</a>
+        <a href="#about" class="foot-link">About</a>
+        <a href="#top" class="foot-link foot-top-link">Back to top <i>↑</i></a>
+      </div>
+      <div class="foot-col">
+        <h4 class="foot-label">Social</h4>
+        <a href="#" class="foot-link" target="_blank" rel="noopener">LinkedIn <i>↗</i></a>
+        <a href="#" class="foot-link" target="_blank" rel="noopener">Instagram <i>↗</i></a>
+      </div>
+      <div class="foot-col">
+        <h4 class="foot-label">Contact</h4>
+        <a href="mailto:hello@spinetech.example" class="foot-link">Email us <i>↗</i></a>
+      </div>
     </div>
-    <nav class="foot-cols">
-      <div><h4>Work</h4><a href="#work">Northgate Health</a><a href="#work">Arcline Logistics</a><a href="#work">Civic Grid</a><a href="#work">Halden Labs</a><a href="#work">Meridian Retail</a><a href="#work">+ More</a></div>
-      <div><h4>Learn</h4><a href="#about">About us</a><a href="#services">Services</a></div>
-      <div><h4>Reach Out</h4><a href="mailto:hello@spinetech.example">Contact</a><a href="mailto:hello@spinetech.example">Email</a></div>
-    </nav>
-    <p class="copy">© 2026 Spine Tech. All rights reserved.</p>
+    <div class="foot-legal">
+      <span>©2026 Spine Tech</span>
+      <a href="#">Privacy</a>
+      <span>Hardware · Software · AI</span>
+    </div>
+    <p class="foot-mark fit" aria-label="Spine Tech"><span class="line">spine tech</span></p>
   </footer>
-
-  <!-- 8. End scene -->
-  <section class="end">
-    <canvas id="gl-end" aria-hidden="true"></canvas>
-    <h2 class="display end-top">Thanks For Scrolling</h2>
-    <h2 class="display end-bot">This Far!</h2>
-  </section>
 
   <script type="module" src="/src/main.ts"></script>
 </body>

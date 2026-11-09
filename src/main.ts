@@ -18,6 +18,43 @@ $$<HTMLAnchorElement>('a[href^="#"]').forEach((a) =>
   }),
 );
 
+/* ---------- Header theme: strictly black or white ----------
+   For each header item, look at what sits behind it. Images, background
+   images and dark backgrounds count as dark -> item turns white; else black. */
+const header = $('.header');
+const headerItems = $$('.logo, .navlink, .pill-cta', header);
+function isDark(el: Element | null): boolean {
+  for (; el && el !== document.documentElement; el = el.parentElement) {
+    if (el instanceof HTMLImageElement || el instanceof SVGImageElement || el instanceof HTMLVideoElement) return true;
+    if (el.matches('.svc, .thumb, [data-theme="dark"]')) return true;
+    const cs = getComputedStyle(el);
+    if (cs.backgroundImage !== 'none' && !cs.backgroundImage.startsWith('linear-gradient(transparent')) return true;
+    const m = cs.backgroundColor.match(/[\d.]+/g);
+    if (m && (m.length < 4 || +m[3] > 0.5)) return 0.2126 * +m[0] + 0.7152 * +m[1] + 0.0722 * +m[2] < 128;
+  }
+  return false;
+}
+function updateHeaderTheme() {
+  for (const item of headerItems) {
+    const r = item.getBoundingClientRect();
+    if (!r.width) continue;
+    const under = document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2).find((e) => !header.contains(e) && !e.closest('.loader, .cursor'));
+    item.classList.toggle('on-dark', isDark(under ?? null));
+  }
+}
+let themeQueued = false;
+const queueHeaderTheme = () => {
+  if (themeQueued) return;
+  themeQueued = true;
+  requestAnimationFrame(() => { themeQueued = false; updateHeaderTheme(); });
+};
+lenis.on('scroll', queueHeaderTheme);
+addEventListener('scroll', queueHeaderTheme, { passive: true });
+addEventListener('resize', queueHeaderTheme);
+addEventListener('load', updateHeaderTheme);
+// the preloader covers the page at first: re-check once it has gone
+new MutationObserver(queueHeaderTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
 /* ---------- Projects ---------- */
 const list = $('#projects');
 list.innerHTML = projects
@@ -155,7 +192,6 @@ $$('.mag').forEach((el) => {
 
 /* ---------- WebGL (lazy) ---------- */
 let heroGL: { frame: (t: number, v: number) => void } | null = null;
-let endGL: { frame: (t: number) => void; visible: boolean } | null = null;
 let titleGL: { frame: (t: number) => void } | null = null;
 // liquid title: start after the preloader and the title rise-in, only for mouse users
 if (!reduced && matchMedia('(hover: hover)').matches) {
@@ -168,18 +204,6 @@ if (!reduced && matchMedia('(hover: hover)').matches) {
 }
 if (!reduced) {
   import('./gl/hero').then((m) => { heroGL = m.createHero($('#gl-hero'), $('#gl-anchor')); });
-  const endEl = $('.end');
-  const endIO = new IntersectionObserver(async ([e]) => {
-    if (e.isIntersecting && !endGL) endGL = (await import('./gl/end')).createEnd($('#gl-end'));
-    if (endGL) endGL.visible = e.isIntersecting;
-  }, { rootMargin: '400px' });
-  endIO.observe(endEl);
-}
-{
-  // header shows only the CTA while the end scene fills most of the screen
-  const endEl = $('.end');
-  new IntersectionObserver(([e]) => document.body.classList.toggle('at-end', e.intersectionRatio > 0.6), { threshold: [0, 0.6, 1] })
-    .observe(endEl);
 }
 
 /* ---------- Main loop ---------- */
@@ -232,7 +256,6 @@ function raf(now: number) {
 
   heroGL?.frame(now / 1000, v);
   titleGL?.frame(now / 1000);
-  if (endGL?.visible) endGL.frame(now / 1000);
   requestAnimationFrame(raf);
 }
 requestAnimationFrame(raf);
