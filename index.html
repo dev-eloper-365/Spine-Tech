@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spine Tech — Hardware, Software &amp; AI Integration</title>
+  <meta name="description" content="Spine Tech solves hardware and software problems for companies and agencies, and connects organizations with AI-driven workflows." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="/fonts/Respira-Black.woff2" as="font" type="font/woff2" crossorigin />
+</head>
+<body>
+  <!-- Brand mark (original): a stylized spine — three vertebrae on one axis -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="mark" viewBox="0 0 64 64">
+      <rect x="29" y="1" width="6" height="62" rx="3"/>
+      <rect x="15" y="5" width="34" height="13" rx="6.5"/>
+      <rect x="6" y="25.5" width="52" height="13" rx="6.5"/>
+      <rect x="15" y="46" width="34" height="13" rx="6.5"/>
+    </symbol>
+  </svg>
+
+  <div class="loader" aria-hidden="true"><div class="loader-inner"><span class="loader-num">0%</span><i class="loader-line"></i></div></div>
+  <div class="cursor" aria-hidden="true"></div>
+  <canvas class="gl-fixed" id="gl-hero" aria-hidden="true"></canvas>
+
+  <header class="header">
+    <a href="#top" class="logo" aria-label="Spine Tech home"><svg><use href="#mark"/></svg></a>
+    <nav class="nav">
+      <a href="#work" class="navlink mag"><i class="blob"></i><span class="roll"><span data-t="WORK">WORK</span></span></a>
+      <a href="#services" class="navlink mag"><i class="blob"></i><span class="roll"><span data-t="SERVICES">SERVICES</span></span></a>
+      <a href="#about" class="navlink mag"><i class="blob"></i><span class="roll"><span data-t="ABOUT">ABOUT</span></span></a>
+      <a href="#contact" class="pill-cta">CONTACT <i class="arrow">→</i></a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- 1. Hero -->
+    <section class="hero">
+      <h1 class="display hero-title fit" aria-label="Spine Technologies">
+        <span class="line">Spine</span>
+        <span class="line">Technologies</span>
+      </h1>
+      <div class="spinner hero-spinner" data-fill="no" data-text="AI SYSTEMS TECH SOLUTIONS"></div>
+      <p class="hero-intro">
+        Welcome to Spine Tech. We are a team that solves hardware and software problems
+        for companies and agencies. Explore our work to see what we can connect. If you
+        want to work with us, or have a question, feel free to <a href="#contact" class="u">reach out here</a>.
+      </p>
+    </section>
+
+    <!-- 2. WebGL object over faded display text -->
+    <section class="gl-stage">
+      <p class="display ghost" aria-hidden="true"><span>Everything Is</span><span>Connected!?</span></p>
+      <div class="gl-anchor" id="gl-anchor"></div>
+    </section>
+
+    <!-- 3. Intro split -->
+    <section class="intro" id="about">
+      <div class="intro-media">
+        <div class="strip" data-speed="-0.12"><img src="/art/collage-1.svg" alt="" loading="lazy" /></div>
+        <div class="strip" data-speed="0.1"><img src="/art/collage-2.svg" alt="" loading="lazy" /></div>
+        <div class="strip" data-speed="-0.06"><img src="/art/collage-3.svg" alt="" loading="lazy" /></div>
+      </div>
+      <div class="intro-col">
+        <div class="intro-sticky">
+          <h2 class="display h-lg reveal"><span>What We</span><span>Connect</span></h2>
+          <div class="intro-text">
+            <p>From the problems we solve to the systems we've linked—this site is here
+              to give you a clear picture of what we do and how we can help.</p>
+            <p>Whether you need a broken network fixed, a custom platform built, or AI that
+              moves work between teams—dive in and see how we connect it all.</p>
+          </div>
+          <div class="progress"><i></i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Marquee -->
+    <section class="marquee" aria-label="Hardware, Software, AI, Systems, Workflows">
+      <div class="marquee-track">
+        <div class="marquee-row">
+          <span>HARDWARE</span><svg class="sep"><use href="#mark"/></svg>
+          <span>SOFTWARE</span><svg class="sep"><use href="#mark"/></svg>
+          <span>AI</span><svg class="sep"><use href="#mark"/></svg>
+          <span>SYSTEMS</span><svg class="sep"><use href="#mark"/></svg>
+          <span>FLOWS</span><svg class="sep"><use href="#mark"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Services -->
+    <section class="services" id="services">
+      <div class="sec-head">
+        <h2 class="display h-xl reveal">Services</h2>
+        <p>Explore the services we offer below. Each one keeps your business running,
+          connected, and ready to grow. Whether you start from scratch or fix an existing
+          system, we bring the tools, strategy, and execution to move you forward.</p>
+      </div>
+      <div class="svc-track"><div class="svc-sticky">
+        <article class="svc">
+          <img src="/art/svc-hardware.svg" alt="" loading="lazy" />
+          <div class="svc-body">
+            <h3>Hardware Support</h3>
+            <p>Servers, devices and networks that stay up. We diagnose, repair and upgrade the
+              hardware your teams depend on, so work never stops.</p>
+            <ul class="pills light"><li>Networks</li><li>Devices</li><li>Uptime Monitoring</li></ul>
+            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+          </div>
+        </article>
+        <article class="svc">
+          <img src="/art/svc-software.svg" alt="" loading="lazy" />
+          <div class="svc-body">
+            <h3>Software Solutions</h3>
+            <p>Custom software built for your business. Portals, internal tools, dashboards and
+              integrations—whatever you need to run more efficiently.</p>
+            <ul class="pills light"><li>Full-Stack</li><li>Platforms</li></ul>
+            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+          </div>
+        </article>
+        <article class="svc">
+          <img src="/art/svc-ai.svg" alt="" loading="lazy" />
+          <div class="svc-body">
+            <h3>AI Integration</h3>
+            <p>AI that does real work. We plug models into your data and tools to automate
+              support, research and reporting with clear results.</p>
+            <ul class="pills light"><li>Agents</li><li>Automation</li><li>Data</li></ul>
+            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+          </div>
+        </article>
+        <article class="svc">
+          <img src="/art/svc-workflow.svg" alt="" loading="lazy" />
+          <div class="svc-body">
+            <h3>Connected Workflows</h3>
+            <p>Ongoing work that links organizations together. We connect your systems with
+              partners and agencies so workflows run end to end.</p>
+            <ul class="pills light"><li>Integrations</li><li>Peace of mind</li></ul>
+            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+          </div>
+        </article>
+        <article class="svc">
+          <img src="/art/work-6.svg" alt="" loading="lazy" />
+          <div class="svc-body">
+            <h3>IT Maintenance</h3>
+            <p>Ongoing support to keep your systems fast, secure and up to date. Fixes, patches
+              and monitoring handled, so you never have to think about it.</p>
+            <ul class="pills light"><li>Monitoring</li><li>Security</li></ul>
+            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+          </div>
+        </article>
+      </div></div>
+    </section>
+
+    <!-- 6. Featured work -->
+    <section class="work" id="work">
+      <div class="work-head">
+        <h2 class="display h-xl reveal"><span>Featured</span><span>Work</span></h2>
+        <div class="spinner work-spinner" data-text="SCROLL SCROLL SCROLL "></div>
+      </div>
+      <div class="view-toggle" role="tablist">
+        <button class="on" data-view="card" role="tab" aria-selected="true">Card View</button>
+        <button data-view="list" role="tab" aria-selected="false">List View</button>
+      </div>
+      <div class="projects" data-view="card" id="projects"></div>
+      <div class="hover-img" aria-hidden="true"><img alt="" /></div>
+    </section>
+  </main>
+
+  <!-- 7. Footer -->
+  <footer class="footer" id="contact">
+    <div class="foot-top">
+      <h2 class="display h-xl reveal">Let's Connect!</h2>
+      <div class="spinner foot-spinner" data-text="WE REALLY LOVE CONNECTING! "></div>
+    </div>
+    <nav class="foot-cols">
+      <div><h4>Work</h4><a href="#work">Northgate Health</a><a href="#work">Arcline Logistics</a><a href="#work">Civic Grid</a><a href="#work">Halden Labs</a><a href="#work">Meridian Retail</a><a href="#work">+ More</a></div>
+      <div><h4>Learn</h4><a href="#about">About us</a><a href="#services">Services</a></div>
+      <div><h4>Reach Out</h4><a href="mailto:hello@spinetech.example">Contact</a><a href="mailto:hello@spinetech.example">Email</a></div>
+    </nav>
+    <p class="copy">© 2026 Spine Tech. All rights reserved.</p>
+  </footer>
+
+  <!-- 8. End scene -->
+  <section class="end">
+    <canvas id="gl-end" aria-hidden="true"></canvas>
+    <h2 class="display end-top">Thanks For Scrolling</h2>
+    <h2 class="display end-bot">This Far!</h2>
+  </section>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

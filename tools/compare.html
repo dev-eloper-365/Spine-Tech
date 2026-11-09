@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- Dev-only page: shows the reference and the local build side by side at desktop width.
+     Open http://localhost:5173/tools/compare.html (not included in the production build). -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Compare — Reference vs Spine Tech</title>
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  body { display: flex; height: 100vh; overflow: hidden; background: #222; font: 12px system-ui, sans-serif; }
+  .pane { position: relative; flex: 1; overflow: hidden; border-left: 1px solid #444; }
+  .label { position: absolute; z-index: 2; left: 8px; bottom: 8px; background: #000; color: #fff; padding: 4px 8px; border-radius: 4px; }
+  iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; background: #fff; }
+  .bar { position: fixed; z-index: 3; right: 8px; bottom: 8px; display: flex; gap: 6px; }
+  .bar button { background: #000; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 4px 8px; cursor: pointer; }
+</style>
+</head>
+<body>
+  <div class="pane"><span class="label">Reference</span><iframe src="https://www.ryanritzenthaler.com/"></iframe></div>
+  <div class="pane"><span class="label">Spine Tech (local)</span><iframe src="/"></iframe></div>
+  <div class="bar"><button data-w="1440">1440</button><button data-w="1280">1280</button><button data-w="390">390</button></div>
+<script>
+  // Both iframes get the same fixed viewport (default 1440x813), scaled to fit the pane,
+  // so vw/vh-based layout is identical on both sides.
+  const q = new URLSearchParams(location.search);
+  let W = +(q.get('w') || 1440);
+  const H = +(q.get('h') || 813);
+  function layout() {
+    document.querySelectorAll('.pane').forEach((p) => {
+      const f = p.querySelector('iframe');
+      const s = Math.min(p.clientWidth / W, p.clientHeight / H);
+      f.style.width = W + 'px';
+      f.style.height = (W === 390 ? 844 : H) + 'px';
+      f.style.transform = `scale(${s})`;
+    });
+  }
+  document.querySelectorAll('.bar button').forEach((b) => b.onclick = () => { W = +b.dataset.w; layout(); });
+  addEventListener('resize', layout);
+  layout();
+</script>
+</body>
+</html>
