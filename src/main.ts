@@ -20,6 +20,24 @@ themeBtn.addEventListener('click', () => {
   dispatchEvent(new Event('themechange'));
 });
 
+/* Films and posters exist in a light and a dark version: /work/<id>.mp4|jpg and /work/<id>-dark.mp4|jpg */
+const FILM = /^(\/work\/S\d-\d\d)(-dark)?\.(mp4|jpg)$/;
+const themed = (path: string) => path.replace(FILM, (_m, base: string, _d: string, ext: string) => `${base}${isDark() ? '-dark' : ''}.${ext}`);
+const swapFilms = () => {
+  document.querySelectorAll<HTMLImageElement | HTMLVideoElement>('img[src^="/work/S"], video[poster^="/work/S"], video[src^="/work/S"]').forEach((el) => {
+    if (el instanceof HTMLImageElement) { const n = themed(el.getAttribute('src')!); if (n !== el.getAttribute('src')) el.src = n; return; }
+    const poster = el.getAttribute('poster');
+    if (poster) el.poster = themed(poster);
+    const src = el.getAttribute('src');
+    if (src && themed(src) !== src) {
+      const playing = !el.paused;
+      el.src = themed(src);
+      if (playing) el.play().catch(() => {});
+    }
+  });
+};
+addEventListener('themechange', swapFilms);
+
 /* ---------- Smooth scroll ---------- */
 const lenis = new Lenis({ lerp: 0.1, smoothWheel: !reduced });
 let velocity = 0;
@@ -55,7 +73,7 @@ $('.player-close', player).addEventListener('click', closePlayer);
 const openPlayer = (name: string, src: string) => {
   hoverImg.classList.remove('on');
   $('.player-title', player).textContent = name;
-  playerVideo.src = src;
+  playerVideo.src = themed(src);
   lenis.stop();
   player.showModal();
   playerVideo.play().catch(() => {});
@@ -67,7 +85,7 @@ $$<HTMLAnchorElement>('.card', list).forEach((c) => {
   const v = $<HTMLVideoElement>('video', c);
   c.addEventListener('mouseenter', () => {
     if (list.dataset.view !== 'card' || !matchMedia('(hover: hover)').matches) return;
-    if (!v.src) v.src = c.dataset.video!;
+    if (!v.src) v.src = themed(c.dataset.video!);
     v.play().catch(() => {});
   });
   c.addEventListener('mouseleave', () => { v.pause(); });
@@ -78,6 +96,7 @@ $$<HTMLAnchorElement>('.card', list).forEach((c) => {
   });
 });
 
+swapFilms();
 const hoverImg = $('.hover-img');
 const hoverImgEl = $<HTMLImageElement>('img', hoverImg);
 $$<HTMLButtonElement>('.view-toggle button').forEach((b) =>
@@ -91,7 +110,7 @@ $$<HTMLButtonElement>('.view-toggle button').forEach((b) =>
 $$('.card', list).forEach((c) => {
   c.addEventListener('mouseenter', () => {
     if (list.dataset.view !== 'list') return;
-    hoverImgEl.src = c.dataset.img!;
+    hoverImgEl.src = themed(c.dataset.img!);
     hoverImg.classList.add('on');
   });
   c.addEventListener('mouseleave', () => hoverImg.classList.remove('on'));
