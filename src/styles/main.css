@@ -29,20 +29,6 @@
   --display: 'Respira', serif;
 }
 @media (max-width: 900px) { :root { --pad: 20px; } }
-@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) {
-  --grey: #141416;
-  --ghost: #1f1f22;
-  --bg: #0c0c0d;
-  --fg: #f2f2f2;
-  --surface: #18181a;
-  --surface-2: #111113;
-  --marquee-bg: #101012;
-  --pill: #232326;
-  --muted: #7c7c80;
-  --muted-line: #333336;
-  --copy: #a1a1a6;
-  color-scheme: dark;
-} }
 :root[data-theme='dark'] {
   --grey: #141416;
   --ghost: #1f1f22;
@@ -315,5 +301,4 @@ html.loading { overflow: hidden; }
 .theme-toggle { width: 40px; height: 40px; margin-left: 8px; display: grid; place-items: center; border-radius: 50%; }
 .theme-toggle svg { width: 20px; height: 20px; transition: transform .6s cubic-bezier(.7,0,.2,1); }
 :root[data-theme='dark'] .theme-toggle svg { transform: rotate(180deg); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .theme-toggle svg { transform: rotate(180deg); } }
 .at-end .theme-toggle { opacity: 0; pointer-events: none; }

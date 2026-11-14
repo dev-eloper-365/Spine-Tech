@@ -6,10 +6,9 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => [...r.querySelectorAll(s)] as T[];
 
-/* ---------- Theme: system by default, a saved choice wins ---------- */
+/* ---------- Theme: light by default; the toggle saves a dark or light choice ---------- */
 const root = document.documentElement;
-const darkQuery = matchMedia('(prefers-color-scheme: dark)');
-const isDark = () => (root.dataset.theme ? root.dataset.theme === 'dark' : darkQuery.matches);
+const isDark = () => root.dataset.theme === 'dark';
 const themeBtn = $<HTMLButtonElement>('.theme-toggle');
 const syncThemeLabel = () => themeBtn.setAttribute('aria-label', isDark() ? 'Switch to light mode' : 'Switch to dark mode');
 syncThemeLabel();
@@ -20,7 +19,6 @@ themeBtn.addEventListener('click', () => {
   syncThemeLabel();
   dispatchEvent(new Event('themechange'));
 });
-darkQuery.addEventListener('change', () => { if (!root.dataset.theme) { syncThemeLabel(); dispatchEvent(new Event('themechange')); } });
 
 /* ---------- Smooth scroll ---------- */
 const lenis = new Lenis({ lerp: 0.1, smoothWheel: !reduced });
