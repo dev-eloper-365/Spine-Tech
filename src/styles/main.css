@@ -104,7 +104,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero { position: relative; padding: 0 var(--pad) 15px; height: calc(100vh - 96px); min-height: 560px; max-height: 1000px; display: flex; flex-direction: column; justify-content: flex-end; }
 .hero-title { white-space: nowrap; line-height: 1.25; }
 .hero-title .line { display: block; width: max-content; }
-.hero-spinner { position: absolute; right: 35px; top: -65px; z-index: 101; width: min(15vw, 280px); height: min(15vw, 280px); }
+.hero-spinner { position: absolute; right: 40px; top: 24px; z-index: 101; width: min(11vw, 180px); height: min(11vw, 180px); }
 .hero-intro { max-width: 520px; margin-top: 12px; font-size: 14px; line-height: 21px; }
 @media (max-width: 900px) { .hero-spinner { width: 120px; height: 120px; top: -20px; } }
 
@@ -147,8 +147,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .svc-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .svc { position: absolute; inset: 0; overflow: hidden; color: #fff; will-change: transform; transform: translate3d(100%,0,0); }
 .svc:first-child { transform: none; }
-.svc > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.svc::after { content: ''; position: absolute; inset: 0; background: #000; opacity: .3; }
+.svc > img, .svc > video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+.svc::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.62) 45%, rgba(0,0,0,.3) 100%); }
 .svc-body { position: absolute; left: var(--pad); bottom: 40px; z-index: 1; max-width: 640px; }
 .svc h3 { font-size: clamp(40px, 4.17vw, 60px); font-weight: 600; line-height: 1; margin-bottom: 16px; }
 .svc p { font-size: 12px; line-height: 18px; font-weight: 500; max-width: 480px; margin-bottom: 24px; }

@@ -38,6 +38,16 @@ const closePlayer = () => player.close();
 player.addEventListener('close', () => { playerVideo.pause(); playerVideo.removeAttribute('src'); playerVideo.load(); lenis.start(); });
 player.addEventListener('click', (e) => { if (e.target === player) closePlayer(); });
 $('.player-close', player).addEventListener('click', closePlayer);
+const openPlayer = (name: string, src: string) => {
+  $('.player-title', player).textContent = name;
+  playerVideo.src = src;
+  lenis.stop();
+  player.showModal();
+  playerVideo.play().catch(() => {});
+};
+$$<HTMLAnchorElement>('[data-play]').forEach((a) =>
+  a.addEventListener('click', (e) => { e.preventDefault(); openPlayer(a.dataset.name!, a.dataset.play!); }),
+);
 $$<HTMLAnchorElement>('.card', list).forEach((c) => {
   const v = $<HTMLVideoElement>('video', c);
   c.addEventListener('mouseenter', () => {
@@ -49,11 +59,7 @@ $$<HTMLAnchorElement>('.card', list).forEach((c) => {
   c.addEventListener('click', (e) => {
     e.preventDefault();
     v.pause();
-    $('.player-title', player).textContent = c.dataset.name!;
-    playerVideo.src = c.dataset.video!;
-    lenis.stop();
-    player.showModal();
-    playerVideo.play().catch(() => {});
+    openPlayer(c.dataset.name!, c.dataset.video!);
   });
 });
 
@@ -124,6 +130,8 @@ document.addEventListener('pointerover', (e) => {
 /* ---------- Services: horizontal slides inside a sticky track ---------- */
 const svcTrack = $('.svc-track');
 const slides = $$('.svc', svcTrack);
+const slideVideos = slides.map((el) => $<HTMLVideoElement>('video', el));
+let activeSlide = -1;
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
 /* ---------- Intro: strip parallax + progress line ---------- */
@@ -246,6 +254,15 @@ function raf(now: number) {
       const x = d > 0 ? Math.min(d, 1) * 100 : -25 * Math.min(-d, 1);
       el.style.transform = `translate3d(${x}%,0,0)`;
     });
+    // only the slide in front plays its film (muted)
+    const a = Math.round(p);
+    if (a !== activeSlide) {
+      slideVideos.forEach((v, i) => (i === a ? v.play().catch(() => {}) : v.pause()));
+      activeSlide = a;
+    }
+  } else if (activeSlide !== -1) {
+    slideVideos.forEach((v) => v.pause());
+    activeSlide = -1;
   }
 
   // intro: strips move at different speeds; progress line follows the section
