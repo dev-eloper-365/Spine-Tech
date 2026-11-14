@@ -63,7 +63,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   padding: 8px var(--pad); height: 96px;
   color: #fff; mix-blend-mode: difference;
 }
-.logo svg { width: 64px; height: 64px; fill: currentColor; display: block; transition: transform .6s cubic-bezier(.7,0,.2,1); }
+.logo { display: flex; align-items: center; height: 64px; }
+.logo svg { height: 40px; width: calc(40px * 264 / 758); fill: currentColor; display: block; transition: transform .6s cubic-bezier(.7,0,.2,1); }
 .logo:hover svg { transform: rotate(180deg); }
 .nav { display: flex; align-items: center; gap: 0; font-size: 14px; font-weight: 700; }
 .navlink { position: relative; display: grid; place-items: center; padding: 0 24px; height: 62px; will-change: transform; }
@@ -113,7 +114,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- WebGL stage ---------- */
 .gl-stage { position: relative; height: 1008px; display: grid; place-items: center; }
 .ghost { color: var(--ghost); text-align: center; font-size: clamp(64px, 11vw, 190px); line-height: .95; }
-.gl-anchor { position: absolute; left: 40%; top: 46%; width: min(78vw, 1120px); aspect-ratio: 1; transform: translate(-50%, -50%); }
+.gl-anchor { position: absolute; left: 50%; top: 50%; width: min(78vw, 1120px, 88vh); aspect-ratio: 1; transform: translate(-50%, -50%); }
 
 /* ---------- Intro split ---------- */
 .intro { display: flex; gap: 40px; padding: 80px var(--pad); margin-top: 144px; }
