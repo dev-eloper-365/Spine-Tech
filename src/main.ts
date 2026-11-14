@@ -1,10 +1,42 @@
 import './styles/main.css';
 import Lenis from 'lenis';
-import { projects } from './data';
+import { groups, projects } from './data';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => [...r.querySelectorAll(s)] as T[];
+
+/* ---------- Theme: light by default; the toggle saves a dark or light choice ---------- */
+const root = document.documentElement;
+const isDark = () => root.dataset.theme === 'dark';
+const themeBtn = $<HTMLButtonElement>('.theme-toggle');
+const syncThemeLabel = () => themeBtn.setAttribute('aria-label', isDark() ? 'Switch to light mode' : 'Switch to dark mode');
+syncThemeLabel();
+themeBtn.addEventListener('click', () => {
+  const next = isDark() ? 'light' : 'dark';
+  root.dataset.theme = next;
+  try { localStorage.setItem('theme', next); } catch { /* private mode: the choice lasts for this page only */ }
+  syncThemeLabel();
+  dispatchEvent(new Event('themechange'));
+});
+
+/* Films and posters exist in a light and a dark version: /work/<id>.mp4|jpg and /work/<id>-dark.mp4|jpg */
+const FILM = /^(\/work\/S\d-\d\d)(-dark)?\.(mp4|jpg)$/;
+const themed = (path: string) => path.replace(FILM, (_m, base: string, _d: string, ext: string) => `${base}${isDark() ? '-dark' : ''}.${ext}`);
+const swapFilms = () => {
+  document.querySelectorAll<HTMLImageElement | HTMLVideoElement>('img[src^="/work/S"], video[poster^="/work/S"], video[src^="/work/S"]').forEach((el) => {
+    if (el instanceof HTMLImageElement) { const n = themed(el.getAttribute('src')!); if (n !== el.getAttribute('src')) el.src = n; return; }
+    const poster = el.getAttribute('poster');
+    if (poster) el.poster = themed(poster);
+    const src = el.getAttribute('src');
+    if (src && themed(src) !== src) {
+      const playing = !el.paused;
+      el.src = themed(src);
+      if (playing) el.play().catch(() => {});
+    }
+  });
+};
+addEventListener('themechange', swapFilms);
 
 /* ---------- Smooth scroll ---------- */
 const lenis = new Lenis({ lerp: 0.1, smoothWheel: !reduced });
@@ -23,7 +55,7 @@ $$<HTMLAnchorElement>('a[href^="#"]').forEach((a) =>
    images and dark backgrounds count as dark -> item turns white; else black. */
 const header = $('.header');
 const headerItems = $$('.logo, .navlink, .pill-cta', header);
-function isDark(el: Element | null): boolean {
+function isDarkBg(el: Element | null): boolean {
   for (; el && el !== document.documentElement; el = el.parentElement) {
     if (el instanceof HTMLImageElement || el instanceof SVGImageElement || el instanceof HTMLVideoElement) return true;
     if (el.matches('.svc, .thumb, [data-theme="dark"]')) return true;
@@ -39,7 +71,7 @@ function updateHeaderTheme() {
     const r = item.getBoundingClientRect();
     if (!r.width) continue;
     const under = document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2).find((e) => !header.contains(e) && !e.closest('.loader, .cursor'));
-    item.classList.toggle('on-dark', isDark(under ?? null));
+    item.classList.toggle('on-dark', isDarkBg(under ?? null));
   }
 }
 let themeQueued = false;
@@ -51,6 +83,7 @@ const queueHeaderTheme = () => {
 lenis.on('scroll', queueHeaderTheme);
 addEventListener('scroll', queueHeaderTheme, { passive: true });
 addEventListener('resize', queueHeaderTheme);
+addEventListener('themechange', queueHeaderTheme);
 addEventListener('load', updateHeaderTheme);
 // the preloader covers the page at first: re-check once it has gone
 new MutationObserver(queueHeaderTheme).observe(document.body, { attributes: true, attributeFilter: ['class'] });
@@ -59,15 +92,49 @@ new MutationObserver(queueHeaderTheme).observe(document.body, { attributes: true
 const list = $('#projects');
 list.innerHTML = projects
   .map(
-    (p) => `<a class="card" href="#contact" data-img="${p.img}">
-  <div class="thumb"><img src="${p.img}" alt="${p.name} project" loading="lazy"></div>
+    (p) => `<a class="card" href="${p.video}" data-img="${p.img}" data-video="${p.video}" data-name="${p.name}">
+  <div class="thumb"><img src="${p.img}" alt="${p.name} case study" loading="lazy"><video muted playsinline loop preload="none" poster="${p.img}"></video><span class="play" aria-hidden="true">▶</span></div>
   <span class="row-name">${p.name}</span>
-  <div class="meta"><ul class="pills">${p.tags.map((t) => `<li>${t}</li>`).join('')}</ul><span class="date">${p.date === 'Ongoing' ? 'Ongoing' : `Completed: ${p.date}`}</span></div>
+  <div class="meta"><ul class="pills">${p.tags.map((t) => `<li>${t}</li>`).join('')}</ul><span class="date">${groups[p.group]}</span></div>
   <span class="name">${p.name} <i>→</i></span>
 </a>`,
   )
   .join('');
 
+/* Card view: a muted preview plays on hover. Any view: a click opens the film with sound in a dialog. */
+const player = $<HTMLDialogElement>('.player');
+const playerVideo = $<HTMLVideoElement>('video', player);
+const closePlayer = () => player.close();
+player.addEventListener('close', () => { playerVideo.pause(); playerVideo.removeAttribute('src'); playerVideo.load(); lenis.start(); });
+player.addEventListener('click', (e) => { if (e.target === player) closePlayer(); });
+$('.player-close', player).addEventListener('click', closePlayer);
+const openPlayer = (name: string, src: string) => {
+  hoverImg.classList.remove('on');
+  $('.player-title', player).textContent = name;
+  playerVideo.src = themed(src);
+  lenis.stop();
+  player.showModal();
+  playerVideo.play().catch(() => {});
+};
+$$<HTMLAnchorElement>('[data-play]').forEach((a) =>
+  a.addEventListener('click', (e) => { e.preventDefault(); openPlayer(a.dataset.name!, a.dataset.play!); }),
+);
+$$<HTMLAnchorElement>('.card', list).forEach((c) => {
+  const v = $<HTMLVideoElement>('video', c);
+  c.addEventListener('mouseenter', () => {
+    if (list.dataset.view !== 'card' || !matchMedia('(hover: hover)').matches) return;
+    if (!v.src) v.src = themed(c.dataset.video!);
+    v.play().catch(() => {});
+  });
+  c.addEventListener('mouseleave', () => { v.pause(); });
+  c.addEventListener('click', (e) => {
+    e.preventDefault();
+    v.pause();
+    openPlayer(c.dataset.name!, c.dataset.video!);
+  });
+});
+
+swapFilms();
 const hoverImg = $('.hover-img');
 const hoverImgEl = $<HTMLImageElement>('img', hoverImg);
 $$<HTMLButtonElement>('.view-toggle button').forEach((b) =>
@@ -81,7 +148,7 @@ $$<HTMLButtonElement>('.view-toggle button').forEach((b) =>
 $$('.card', list).forEach((c) => {
   c.addEventListener('mouseenter', () => {
     if (list.dataset.view !== 'list') return;
-    hoverImgEl.src = c.dataset.img!;
+    hoverImgEl.src = themed(c.dataset.img!);
     hoverImg.classList.add('on');
   });
   c.addEventListener('mouseleave', () => hoverImg.classList.remove('on'));
@@ -135,6 +202,8 @@ document.addEventListener('pointerover', (e) => {
 /* ---------- Services: horizontal slides inside a sticky track ---------- */
 const svcTrack = $('.svc-track');
 const slides = $$('.svc', svcTrack);
+const slideVideos = slides.map((el) => $<HTMLVideoElement>('video', el));
+let activeSlide = -1;
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
 /* ---------- Intro: strip parallax + progress line ---------- */
@@ -216,6 +285,7 @@ function raf(now: number) {
   // cursor
   cx += (mx - cx) * 0.25; cy += (my - cy) * 0.25;
   cursor.style.transform = `translate3d(${cx}px,${cy}px,0)`;
+  if (hoverImg.classList.contains('on') && (player.open || !document.elementFromPoint(mx, my)?.closest('.projects[data-view="list"] .card'))) hoverImg.classList.remove('on');
   hx += (mx - hx) * 0.12; hy += (my - hy) * 0.12;
   hoverImg.style.transform = `translate3d(${hx - 180}px,${hy - 112}px,0) ${hoverImg.classList.contains('on') ? 'scale(1)' : 'scale(.8)'}`;
 
@@ -244,6 +314,15 @@ function raf(now: number) {
       const x = d > 0 ? Math.min(d, 1) * 100 : -25 * Math.min(-d, 1);
       el.style.transform = `translate3d(${x}%,0,0)`;
     });
+    // only the slide in front plays its film (muted)
+    const a = Math.round(p);
+    if (a !== activeSlide) {
+      slideVideos.forEach((v, i) => (i === a ? v.play().catch(() => {}) : v.pause()));
+      activeSlide = a;
+    }
+  } else if (activeSlide !== -1) {
+    slideVideos.forEach((v) => v.pause());
+    activeSlide = -1;
   }
 
   // intro: strips move at different speeds; progress line follows the section

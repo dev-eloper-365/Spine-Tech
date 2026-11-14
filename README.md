@@ -68,6 +68,6 @@ vercel deploy --prod
 
 ## Placeholder content to replace
 
-- Project names and details in `src/data.ts`
+- Project films in `public/work/` come from the POW Demos exports (replace them when a film changes)
 - Contact email `hello@spinetech.example`
 - Images in `public/art/`

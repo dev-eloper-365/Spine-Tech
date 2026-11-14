@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Spine Tech — Hardware, Software &amp; AI Integration</title>
+  <title>Spine Tech</title>
   <meta name="description" content="Spine Tech solves hardware and software problems for companies and agencies, and connects organizations with AI-driven workflows." />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+  <script>try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}</script>
 </head>
 <body>
-  <!-- Brand mark (original): a stylized spine — three vertebrae on one axis -->
+  <!-- Brand mark: the Spine Technologies logo (11 rounded bars), centred in a square box -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="mark" viewBox="0 0 64 64">
-      <rect x="29" y="1" width="6" height="62" rx="3"/>
-      <rect x="15" y="5" width="34" height="13" rx="6.5"/>
-      <rect x="6" y="25.5" width="52" height="13" rx="6.5"/>
-      <rect x="15" y="46" width="34" height="13" rx="6.5"/>
-    </symbol>
+    <symbol id="mark" viewBox="-247 0 758 758"><rect x="148" y="0" width="61" height="32" rx="16"/><rect x="85" y="52" width="92" height="43" rx="21.5"/><rect x="38" y="113" width="121" height="55" rx="27.5"/><rect x="0" y="188" width="163" height="64" rx="32"/><rect x="9" y="272" width="166" height="64" rx="32"/><rect x="50" y="355" width="168" height="64" rx="32"/><rect x="81" y="438" width="171" height="63" rx="31.5"/><rect x="100" y="520" width="164" height="62" rx="31"/><rect x="110" y="601" width="122" height="48" rx="24"/><rect x="97" y="668" width="94" height="39" rx="19.5"/><rect x="66" y="726" width="62" height="32" rx="16"/></symbol>
+    <symbol id="logo" viewBox="0 0 264 758"><rect x="148" y="0" width="61" height="32" rx="16"/><rect x="85" y="52" width="92" height="43" rx="21.5"/><rect x="38" y="113" width="121" height="55" rx="27.5"/><rect x="0" y="188" width="163" height="64" rx="32"/><rect x="9" y="272" width="166" height="64" rx="32"/><rect x="50" y="355" width="168" height="64" rx="32"/><rect x="81" y="438" width="171" height="63" rx="31.5"/><rect x="100" y="520" width="164" height="62" rx="31"/><rect x="110" y="601" width="122" height="48" rx="24"/><rect x="97" y="668" width="94" height="39" rx="19.5"/><rect x="66" y="726" width="62" height="32" rx="16"/></symbol>
   </svg>
 
   <div class="loader" aria-hidden="true"><div class="loader-inner"><span class="loader-num">0%</span><i class="loader-line"></i></div></div>
@@ -23,12 +26,13 @@
   <canvas class="gl-fixed" id="gl-hero" aria-hidden="true"></canvas>
 
   <header class="header">
-    <a href="#top" class="logo" aria-label="Spine Tech home"><svg><use href="#mark"/></svg></a>
+    <a href="#top" class="logo" aria-label="Spine Tech home"><svg><use href="#logo"/></svg></a>
     <nav class="nav">
       <a href="#work" class="navlink mag"><i class="blob"></i><span class="roll"><span data-t="WORK">WORK</span></span></a>
       <a href="#services" class="navlink mag"><i class="blob"></i><span class="roll"><span data-t="SERVICES">SERVICES</span></span></a>
       <a href="#about" class="navlink mag"><i class="blob"></i><span class="roll"><span data-t="ABOUT">ABOUT</span></span></a>
       <a href="#contact" class="pill-cta">CONTACT <i class="arrow">→</i></a>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 1.75a8.25 8.25 0 0 1 0 16.5z" fill="currentColor"/></svg></button>
     </nav>
   </header>
 
@@ -55,10 +59,9 @@
 
     <!-- 3. Intro split -->
     <section class="intro" id="about">
-      <div class="intro-media">
-        <div class="strip" data-speed="-0.12"><img src="/art/collage-1.svg" alt="" loading="lazy" /></div>
-        <div class="strip" data-speed="0.1"><img src="/art/collage-2.svg" alt="" loading="lazy" /></div>
-        <div class="strip" data-speed="-0.06"><img src="/art/collage-3.svg" alt="" loading="lazy" /></div>
+      <div class="intro-media wall" aria-label="Project films">
+        <div class="wall-col"><div class="wall-track"><a class="wall-card" href="/work/S1-01.mp4" data-play="/work/S1-01.mp4" data-name="KK Jewels Silver Studio"><img src="/work/S1-01.jpg" alt="KK Jewels Silver Studio case study" loading="lazy" /><span>KK Jewels Silver Studio</span></a><a class="wall-card" href="/work/S1-02.mp4" data-play="/work/S1-02.mp4" data-name="Almirah Luxe Gallery"><img src="/work/S1-02.jpg" alt="Almirah Luxe Gallery case study" loading="lazy" /><span>Almirah Luxe Gallery</span></a><a class="wall-card" href="/work/S1-03.mp4" data-play="/work/S1-03.mp4" data-name="Maliha Designs"><img src="/work/S1-03.jpg" alt="Maliha Designs case study" loading="lazy" /><span>Maliha Designs</span></a><a class="wall-card" href="/work/S1-04.mp4" data-play="/work/S1-04.mp4" data-name="Rahul Impex"><img src="/work/S1-04.jpg" alt="Rahul Impex case study" loading="lazy" /><span>Rahul Impex</span></a><a class="wall-card" href="/work/S1-05.mp4" data-play="/work/S1-05.mp4" data-name="Dev Tours & Travels"><img src="/work/S1-05.jpg" alt="Dev Tours & Travels case study" loading="lazy" /><span>Dev Tours & Travels</span></a><a class="wall-card" href="/work/S1-06.mp4" data-play="/work/S1-06.mp4" data-name="Onyx Technologies LLC"><img src="/work/S1-06.jpg" alt="Onyx Technologies LLC case study" loading="lazy" /><span>Onyx Technologies LLC</span></a><a class="wall-card" href="/work/S3-02.mp4" data-play="/work/S3-02.mp4" data-name="Page Pulse"><img src="/work/S3-02.jpg" alt="Page Pulse case study" loading="lazy" /><span>Page Pulse</span></a><a class="wall-card" href="/work/S3-04.mp4" data-play="/work/S3-04.mp4" data-name="Slotly AI: Under the Hood"><img src="/work/S3-04.jpg" alt="Slotly AI: Under the Hood case study" loading="lazy" /><span>Slotly AI: Under the Hood</span></a><a class="wall-card" href="/work/S3-06.mp4" data-play="/work/S3-06.mp4" data-name="SLA Monitor: Under the Hood"><img src="/work/S3-06.jpg" alt="SLA Monitor: Under the Hood case study" loading="lazy" /><span>SLA Monitor: Under the Hood</span></a><a class="wall-card" href="/work/S1-01.mp4" data-play="/work/S1-01.mp4" data-name="KK Jewels Silver Studio" aria-hidden="true" tabindex="-1"><img src="/work/S1-01.jpg" alt="" loading="lazy" /><span>KK Jewels Silver Studio</span></a><a class="wall-card" href="/work/S1-02.mp4" data-play="/work/S1-02.mp4" data-name="Almirah Luxe Gallery" aria-hidden="true" tabindex="-1"><img src="/work/S1-02.jpg" alt="" loading="lazy" /><span>Almirah Luxe Gallery</span></a><a class="wall-card" href="/work/S1-03.mp4" data-play="/work/S1-03.mp4" data-name="Maliha Designs" aria-hidden="true" tabindex="-1"><img src="/work/S1-03.jpg" alt="" loading="lazy" /><span>Maliha Designs</span></a><a class="wall-card" href="/work/S1-04.mp4" data-play="/work/S1-04.mp4" data-name="Rahul Impex" aria-hidden="true" tabindex="-1"><img src="/work/S1-04.jpg" alt="" loading="lazy" /><span>Rahul Impex</span></a><a class="wall-card" href="/work/S1-05.mp4" data-play="/work/S1-05.mp4" data-name="Dev Tours & Travels" aria-hidden="true" tabindex="-1"><img src="/work/S1-05.jpg" alt="" loading="lazy" /><span>Dev Tours & Travels</span></a><a class="wall-card" href="/work/S1-06.mp4" data-play="/work/S1-06.mp4" data-name="Onyx Technologies LLC" aria-hidden="true" tabindex="-1"><img src="/work/S1-06.jpg" alt="" loading="lazy" /><span>Onyx Technologies LLC</span></a><a class="wall-card" href="/work/S3-02.mp4" data-play="/work/S3-02.mp4" data-name="Page Pulse" aria-hidden="true" tabindex="-1"><img src="/work/S3-02.jpg" alt="" loading="lazy" /><span>Page Pulse</span></a><a class="wall-card" href="/work/S3-04.mp4" data-play="/work/S3-04.mp4" data-name="Slotly AI: Under the Hood" aria-hidden="true" tabindex="-1"><img src="/work/S3-04.jpg" alt="" loading="lazy" /><span>Slotly AI: Under the Hood</span></a><a class="wall-card" href="/work/S3-06.mp4" data-play="/work/S3-06.mp4" data-name="SLA Monitor: Under the Hood" aria-hidden="true" tabindex="-1"><img src="/work/S3-06.jpg" alt="" loading="lazy" /><span>SLA Monitor: Under the Hood</span></a></div></div>
+        <div class="wall-col rev"><div class="wall-track"><a class="wall-card" href="/work/S2-01.mp4" data-play="/work/S2-01.mp4" data-name="Slotly AI"><img src="/work/S2-01.jpg" alt="Slotly AI case study" loading="lazy" /><span>Slotly AI</span></a><a class="wall-card" href="/work/S2-02.mp4" data-play="/work/S2-02.mp4" data-name="SLA Monitor"><img src="/work/S2-02.jpg" alt="SLA Monitor case study" loading="lazy" /><span>SLA Monitor</span></a><a class="wall-card" href="/work/S2-03.mp4" data-play="/work/S2-03.mp4" data-name="Ultra Doc"><img src="/work/S2-03.jpg" alt="Ultra Doc case study" loading="lazy" /><span>Ultra Doc</span></a><a class="wall-card" href="/work/S2-04.mp4" data-play="/work/S2-04.mp4" data-name="BillSwift"><img src="/work/S2-04.jpg" alt="BillSwift case study" loading="lazy" /><span>BillSwift</span></a><a class="wall-card" href="/work/S3-01.mp4" data-play="/work/S3-01.mp4" data-name="Card Money"><img src="/work/S3-01.jpg" alt="Card Money case study" loading="lazy" /><span>Card Money</span></a><a class="wall-card" href="/work/S2-05.mp4" data-play="/work/S2-05.mp4" data-name="CareerLens"><img src="/work/S2-05.jpg" alt="CareerLens case study" loading="lazy" /><span>CareerLens</span></a><a class="wall-card" href="/work/S3-03.mp4" data-play="/work/S3-03.mp4" data-name="Extroverts"><img src="/work/S3-03.jpg" alt="Extroverts case study" loading="lazy" /><span>Extroverts</span></a><a class="wall-card" href="/work/S3-05.mp4" data-play="/work/S3-05.mp4" data-name="Ultra Doc: Under the Hood"><img src="/work/S3-05.jpg" alt="Ultra Doc: Under the Hood case study" loading="lazy" /><span>Ultra Doc: Under the Hood</span></a><a class="wall-card" href="/work/S2-01.mp4" data-play="/work/S2-01.mp4" data-name="Slotly AI" aria-hidden="true" tabindex="-1"><img src="/work/S2-01.jpg" alt="" loading="lazy" /><span>Slotly AI</span></a><a class="wall-card" href="/work/S2-02.mp4" data-play="/work/S2-02.mp4" data-name="SLA Monitor" aria-hidden="true" tabindex="-1"><img src="/work/S2-02.jpg" alt="" loading="lazy" /><span>SLA Monitor</span></a><a class="wall-card" href="/work/S2-03.mp4" data-play="/work/S2-03.mp4" data-name="Ultra Doc" aria-hidden="true" tabindex="-1"><img src="/work/S2-03.jpg" alt="" loading="lazy" /><span>Ultra Doc</span></a><a class="wall-card" href="/work/S2-04.mp4" data-play="/work/S2-04.mp4" data-name="BillSwift" aria-hidden="true" tabindex="-1"><img src="/work/S2-04.jpg" alt="" loading="lazy" /><span>BillSwift</span></a><a class="wall-card" href="/work/S3-01.mp4" data-play="/work/S3-01.mp4" data-name="Card Money" aria-hidden="true" tabindex="-1"><img src="/work/S3-01.jpg" alt="" loading="lazy" /><span>Card Money</span></a><a class="wall-card" href="/work/S2-05.mp4" data-play="/work/S2-05.mp4" data-name="CareerLens" aria-hidden="true" tabindex="-1"><img src="/work/S2-05.jpg" alt="" loading="lazy" /><span>CareerLens</span></a><a class="wall-card" href="/work/S3-03.mp4" data-play="/work/S3-03.mp4" data-name="Extroverts" aria-hidden="true" tabindex="-1"><img src="/work/S3-03.jpg" alt="" loading="lazy" /><span>Extroverts</span></a><a class="wall-card" href="/work/S3-05.mp4" data-play="/work/S3-05.mp4" data-name="Ultra Doc: Under the Hood" aria-hidden="true" tabindex="-1"><img src="/work/S3-05.jpg" alt="" loading="lazy" /><span>Ultra Doc: Under the Hood</span></a></div></div>
       </div>
       <div class="intro-col">
         <div class="intro-sticky">
@@ -90,60 +93,55 @@
     <!-- 5. Services -->
     <section class="services" id="services">
       <div class="sec-head">
-        <h2 class="display h-xl reveal">Services</h2>
-        <p>Explore the services we offer below. Each one keeps your business running,
-          connected, and ready to grow. Whether you start from scratch or fix an existing
-          system, we bring the tools, strategy, and execution to move you forward.</p>
+        <h2 class="display h-xl reveal">Selected Work</h2>
+        <p>Five projects for the work businesses ask for most: online commerce, bookings,
+          documents, operations monitoring and billing. Scroll through each one, or open
+          its film to see the real product.</p>
       </div>
       <div class="svc-track"><div class="svc-sticky">
         <article class="svc">
-          <img src="/art/svc-hardware.svg" alt="" loading="lazy" />
+          <video muted playsinline loop preload="none" poster="/work/S1-01.jpg" src="/work/S1-01.mp4"></video>
           <div class="svc-body">
-            <h3>Hardware Support</h3>
-            <p>Servers, devices and networks that stay up. We diagnose, repair and upgrade the
-              hardware your teams depend on, so work never stops.</p>
-            <ul class="pills light"><li>Networks</li><li>Devices</li><li>Uptime Monitoring</li></ul>
-            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+            <h3>KK Jewels Silver Studio</h3>
+            <p>Commerce experience for a silver studio. Every piece has its own page, and an enquiry list goes out in one WhatsApp message.</p>
+            <ul class="pills light"><li>E-commerce</li><li>Product catalogue</li><li>WhatsApp enquiries</li></ul>
+            <a href="/work/S1-01.mp4" class="reach" data-play="/work/S1-01.mp4" data-name="KK Jewels Silver Studio">Watch the film <svg><use href="#mark"/></svg></a>
           </div>
         </article>
         <article class="svc">
-          <img src="/art/svc-software.svg" alt="" loading="lazy" />
+          <video muted playsinline loop preload="none" poster="/work/S2-01.jpg" src="/work/S2-01.mp4"></video>
           <div class="svc-body">
-            <h3>Software Solutions</h3>
-            <p>Custom software built for your business. Portals, internal tools, dashboards and
-              integrations—whatever you need to run more efficiently.</p>
-            <ul class="pills light"><li>Full-Stack</li><li>Platforms</li></ul>
-            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+            <h3>Slotly AI</h3>
+            <p>Booking platform for a service studio. Opening hours become bookable slots, and each slot is re-checked the moment you confirm.</p>
+            <ul class="pills light"><li>Booking</li><li>Scheduling</li><li>Live calendar</li></ul>
+            <a href="/work/S2-01.mp4" class="reach" data-play="/work/S2-01.mp4" data-name="Slotly AI">Watch the film <svg><use href="#mark"/></svg></a>
           </div>
         </article>
         <article class="svc">
-          <img src="/art/svc-ai.svg" alt="" loading="lazy" />
+          <video muted playsinline loop preload="none" poster="/work/S2-03.jpg" src="/work/S2-03.mp4"></video>
           <div class="svc-body">
-            <h3>AI Integration</h3>
-            <p>AI that does real work. We plug models into your data and tools to automate
-              support, research and reporting with clear results.</p>
-            <ul class="pills light"><li>Agents</li><li>Automation</li><li>Data</li></ul>
-            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+            <h3>Ultra Doc</h3>
+            <p>Document intelligence for freight logistics. Drop in a PDF, DOCX or TXT file; it is parsed, chunked, embedded and stored.</p>
+            <ul class="pills light"><li>Document processing</li><li>Logistics</li><li>Search</li></ul>
+            <a href="/work/S2-03.mp4" class="reach" data-play="/work/S2-03.mp4" data-name="Ultra Doc">Watch the film <svg><use href="#mark"/></svg></a>
           </div>
         </article>
         <article class="svc">
-          <img src="/art/svc-workflow.svg" alt="" loading="lazy" />
+          <video muted playsinline loop preload="none" poster="/work/S2-02.jpg" src="/work/S2-02.mp4"></video>
           <div class="svc-body">
-            <h3>Connected Workflows</h3>
-            <p>Ongoing work that links organizations together. We connect your systems with
-              partners and agencies so workflows run end to end.</p>
-            <ul class="pills light"><li>Integrations</li><li>Peace of mind</li></ul>
-            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+            <h3>SLA Monitor</h3>
+            <p>SLA dashboard for IT operations. Availability against a 99.9% SLA target, with incidents rated by severity, from one uploaded CSV.</p>
+            <ul class="pills light"><li>Dashboards</li><li>Monitoring</li><li>Data</li></ul>
+            <a href="/work/S2-02.mp4" class="reach" data-play="/work/S2-02.mp4" data-name="SLA Monitor">Watch the film <svg><use href="#mark"/></svg></a>
           </div>
         </article>
         <article class="svc">
-          <img src="/art/work-6.svg" alt="" loading="lazy" />
+          <video muted playsinline loop preload="none" poster="/work/S2-04.jpg" src="/work/S2-04.mp4"></video>
           <div class="svc-body">
-            <h3>IT Maintenance</h3>
-            <p>Ongoing support to keep your systems fast, secure and up to date. Fixes, patches
-              and monitoring handled, so you never have to think about it.</p>
-            <ul class="pills light"><li>Monitoring</li><li>Security</li></ul>
-            <a href="#contact" class="reach">Reach out <svg><use href="#mark"/></svg></a>
+            <h3>BillSwift</h3>
+            <p>Billing and inventory for retail shops. Enter adds the top match, the total updates with every line, and stock follows the bill.</p>
+            <ul class="pills light"><li>Billing</li><li>Inventory</li><li>Keyboard-first</li></ul>
+            <a href="/work/S2-04.mp4" class="reach" data-play="/work/S2-04.mp4" data-name="BillSwift">Watch the film <svg><use href="#mark"/></svg></a>
           </div>
         </article>
       </div></div>
@@ -162,6 +160,10 @@
       <div class="projects" data-view="card" id="projects"></div>
       <div class="hover-img" aria-hidden="true"><img alt="" /></div>
     </section>
+    <dialog class="player" aria-label="Case study film">
+      <div class="player-bar"><span class="player-title"></span><button class="player-close" type="button" aria-label="Close">Close ✕</button></div>
+      <video controls playsinline></video>
+    </dialog>
   </main>
 
   <!-- 7. Footer -->
