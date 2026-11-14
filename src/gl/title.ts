@@ -239,11 +239,12 @@ export function createTitle(title: HTMLElement, host: HTMLElement) {
     textCanvas.width = Math.round(box.w * dpr);
     textCanvas.height = Math.round(box.h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = '#fff';
+    const page = getComputedStyle(document.body);
+    ctx.fillStyle = page.backgroundColor;
     ctx.fillRect(0, 0, box.w, box.h);
     const cs = getComputedStyle(title);
     ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = page.color;
     ctx.textBaseline = 'alphabetic';
     title.querySelectorAll<HTMLElement>('.line').forEach((line) => {
       const lb = line.getBoundingClientRect();
@@ -266,6 +267,7 @@ export function createTitle(title: HTMLElement, host: HTMLElement) {
   });
 
   let resizeQueued = false;
+  addEventListener('themechange', () => layout());
   addEventListener('resize', () => {
     if (resizeQueued) return;
     resizeQueued = true;

@@ -11,7 +11,10 @@
   <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c0c0d" media="(prefers-color-scheme: dark)" />
+  <script>try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}</script>
   <link rel="preload" href="/fonts/Respira-Black.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
@@ -32,6 +35,7 @@
       <a href="#services" class="navlink mag"><i class="blob"></i><span class="roll"><span data-t="SERVICES">SERVICES</span></span></a>
       <a href="#about" class="navlink mag"><i class="blob"></i><span class="roll"><span data-t="ABOUT">ABOUT</span></span></a>
       <a href="#contact" class="pill-cta">CONTACT <i class="arrow">→</i></a>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 1.75a8.25 8.25 0 0 1 0 16.5z" fill="currentColor"/></svg></button>
     </nav>
   </header>
 
