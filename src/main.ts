@@ -39,6 +39,7 @@ player.addEventListener('close', () => { playerVideo.pause(); playerVideo.remove
 player.addEventListener('click', (e) => { if (e.target === player) closePlayer(); });
 $('.player-close', player).addEventListener('click', closePlayer);
 const openPlayer = (name: string, src: string) => {
+  hoverImg.classList.remove('on');
   $('.player-title', player).textContent = name;
   playerVideo.src = src;
   lenis.stop();
@@ -226,6 +227,7 @@ function raf(now: number) {
   // cursor
   cx += (mx - cx) * 0.25; cy += (my - cy) * 0.25;
   cursor.style.transform = `translate3d(${cx}px,${cy}px,0)`;
+  if (hoverImg.classList.contains('on') && (player.open || !document.elementFromPoint(mx, my)?.closest('.projects[data-view="list"] .card'))) hoverImg.classList.remove('on');
   hx += (mx - hx) * 0.12; hy += (my - hy) * 0.12;
   hoverImg.style.transform = `translate3d(${hx - 180}px,${hy - 112}px,0) ${hoverImg.classList.contains('on') ? 'scale(1)' : 'scale(.8)'}`;
 

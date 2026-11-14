@@ -120,7 +120,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .intro { display: flex; gap: 40px; padding: 80px var(--pad); margin-top: 144px; }
 .intro-media { position: relative; width: 50%; height: 673px; border-radius: 8px; overflow: hidden; display: grid; grid-template-columns: 27% 46% 27%; }
 .strip { position: relative; overflow: hidden; }
-.strip img { position: absolute; left: 0; top: -12%; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+.strip img { position: absolute; left: 0; top: -12%; width: 100%; height: 124%; object-fit: cover; object-position: center top; will-change: transform; }
 .intro-col { width: 50%; }
 .intro-sticky { position: sticky; top: 96px; }
 .intro-sticky h2 { margin-bottom: 16px; }
@@ -213,7 +213,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- Footer ---------- */
 .footer { background: var(--grey); padding: 182px var(--pad) 80px; position: relative; z-index: 3; }
 .foot-top { display: flex; justify-content: space-between; align-items: center; gap: 20px; height: 115px; }
-.foot-spinner { width: 320px; height: 320px; flex-shrink: 0; margin-right: -7px; }
+.foot-spinner { width: 320px; height: 320px; flex-shrink: 0; margin-right: 8px; }
 .foot-spinner text { font-size: 27px; }
 .foot-cols { display: flex; gap: 80px; margin-top: 223px; font-size: 14px; line-height: 21px; }
 .foot-cols > div:first-child { width: 125px; }
