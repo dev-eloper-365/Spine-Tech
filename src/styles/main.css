@@ -117,11 +117,25 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .gl-anchor { position: absolute; left: 50%; top: 50%; width: min(78vw, 1120px, 88vh); aspect-ratio: 1; transform: translate(-50%, -50%); }
 
 /* ---------- Intro split ---------- */
-.intro { display: flex; gap: 40px; padding: 80px var(--pad); margin-top: 144px; }
+.intro { display: flex; gap: clamp(40px, 6vw, 96px); padding: 80px var(--pad); margin-top: 144px; }
 .intro-media { position: relative; width: 50%; height: 673px; border-radius: 8px; overflow: hidden; display: grid; grid-template-columns: 27% 46% 27%; }
 .strip { position: relative; overflow: hidden; }
 .strip img { position: absolute; left: 0; top: -12%; width: 100%; height: 124%; object-fit: cover; object-position: center top; will-change: transform; }
-.intro-col { width: 50%; }
+.intro-col { flex: 1; min-width: 0; }
+/* Project wall: two columns of film posters that scroll in opposite directions */
+.intro-media.wall { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 12px; background: #f4f4f4;
+  -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent); }
+.wall-col { overflow: hidden; }
+.wall-track { display: flex; flex-direction: column; gap: 12px; animation: wall-up 70s linear infinite; }
+.wall-col.rev .wall-track { animation-direction: reverse; animation-duration: 80s; }
+.wall-col:hover .wall-track { animation-play-state: paused; }
+@keyframes wall-up { to { transform: translateY(calc(-50% - 6px)); } }
+.wall-card { position: relative; display: block; flex-shrink: 0; aspect-ratio: 16/9; border-radius: 6px; overflow: hidden; background: #fff; box-shadow: 0 1px 0 rgba(0,0,0,.06); }
+.wall-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.wall-card:hover img { transform: scale(1.06); }
+.wall-card span { position: absolute; left: 10px; bottom: 10px; font-size: 12px; line-height: 1; font-weight: 600; color: #fff; background: rgba(0,0,0,.72); padding: 7px 12px; border-radius: 999px; opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .3s; }
+.wall-card:hover span, .wall-card:focus-visible span { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .wall-track { animation: none; } .wall-col { overflow-y: auto; } }
 .intro-sticky { position: sticky; top: 96px; }
 .intro-sticky h2 { margin-bottom: 16px; }
 .intro-text { max-width: 480px; font-size: 12px; line-height: 18px; }
