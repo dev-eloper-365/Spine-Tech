@@ -170,4 +170,4 @@ Run: `npm run dev` (http://localhost:5173). Build: `npm run build` -> dist/.
   (black, white in dark mode), hero WebGL shape (`shape()` in src/gl/hero.ts). Featured Work now lists the 17 real
   case-study films (src/data.ts; web copies 1280x720 in public/work/<id>.mp4 + poster .jpg, from POW_Demos exports v3).
   Card view: muted preview on hover; click opens the film with sound in a <dialog>. Footer Work column uses real names.
-  Not deployed and not committed yet.
+  Pushed (8435b0d, f615baf). Vercel project spine-tech is now connected to GitHub dev-eloper-365/Spine-Tech: every push to main deploys to https://spine-tech.vercel.app. Favicons: favicon.svg/.ico, 16/32 PNG, apple-touch-icon, icon-192/512 + site.webmanifest.
