@@ -1,25 +1,31 @@
-// Placeholder case studies. Replace names, tags, dates and images with real Spine Tech work.
-export const projects = [
-  { name: 'Northgate Health', tags: ['AI Agents', 'HL7 API', 'Azure'], date: 'Apr 2026', img: '/art/work-1.svg' },
-  { name: 'Arcline Logistics', tags: ['IoT', 'Fleet Hardware', 'Node.js'], date: 'Ongoing', img: '/art/work-2.svg' },
-  { name: 'Civic Grid', tags: ['Workflows', 'Gov API', 'Postgres'], date: 'Ongoing', img: '/art/work-3.svg' },
-  { name: 'Halden Labs', tags: ['LLM Ops', 'Python', 'GPU Servers'], date: 'Jan 2026', img: '/art/work-4.svg' },
-  { name: 'Meridian Retail', tags: ['POS Repair', 'Shopify API'], date: 'Dec 2025', img: '/art/work-5.svg' },
-  { name: 'Kestrel Agency', tags: ['Next.js', 'CRM Sync', 'Zapier'], date: 'Nov 2025', img: '/art/work-6.svg' },
-  { name: 'Union Transit', tags: ['Networks', 'Edge Devices'], date: 'Oct 2025', img: '/art/work-7.svg' },
-  { name: 'Brightwell Energy', tags: ['Data Pipelines', 'AI Reports'], date: 'Sep 2025', img: '/art/work-8.svg' },
-  { name: 'Oakridge Schools', tags: ['Device Fleet', 'MDM', 'Wi-Fi'], date: 'Aug 2025', img: '/art/work-9.svg' },
-  { name: 'Pellam Finance', tags: ['Security', 'SSO', 'Audit Logs'], date: 'Jul 2025', img: '/art/work-10.svg' },
-  { name: 'Lumen Studio', tags: ['Render Farm', 'Storage'], date: 'Jun 2025', img: '/art/work-11.svg' },
-  { name: 'Harbor County', tags: ['Records API', 'Workflows'], date: 'May 2025', img: '/art/work-12.svg' },
-  { name: 'Fieldstone Farms', tags: ['IoT Sensors', 'Dashboards'], date: 'Apr 2025', img: '/art/work-13.svg' },
-  { name: 'Atlas Freight', tags: ['EDI', 'Route AI', 'AWS'], date: 'Mar 2025', img: '/art/work-14.svg' },
-  { name: 'Corvid Media', tags: ['CMS', 'Search AI'], date: 'Feb 2025', img: '/art/work-15.svg' },
-  { name: 'Sable Clinics', tags: ['Booking', 'EHR Sync', 'SMS'], date: 'Jan 2025', img: '/art/work-16.svg' },
-  { name: 'Vantage Realty', tags: ['CRM', 'Lead AI'], date: 'Dec 2024', img: '/art/work-17.svg' },
-  { name: 'Ironbridge Works', tags: ['ERP', 'Barcode HW'], date: 'Nov 2024', img: '/art/work-18.svg' },
-  { name: 'Quill Legal', tags: ['Doc AI', 'Archive'], date: 'Oct 2024', img: '/art/work-19.svg' },
-  { name: 'Tidewater Hotels', tags: ['PMS', 'Kiosks', 'Networks'], date: 'Sep 2024', img: '/art/work-20.svg' },
-  { name: 'Nova Robotics', tags: ['Firmware', 'Telemetry'], date: 'Aug 2024', img: '/art/work-21.svg' },
-  { name: 'Greyline Agency', tags: ['Automation', 'Slack API'], date: 'Jul 2024', img: '/art/work-22.svg' },
+// Real client work: one case-study film per project (POW Demos exports v3; web copies in public/work/).
+// `tags` = solution and industry, as the films state them. `group` = the film series.
+export const groups = {
+  S1: 'Digital Experiences',
+  S2: 'Business Systems',
+  S3: 'Technology',
+} as const;
+
+type Project = { id: string; name: string; tags: string[]; group: keyof typeof groups };
+
+const list: Project[] = [
+  { id: 'S1-01', name: 'KK Jewels Silver Studio', tags: ['Commerce experience', 'Silver studio'], group: 'S1' },
+  { id: 'S1-02', name: 'Almirah Luxe Gallery', tags: ['Scroll-story website', 'Luxury venue'], group: 'S1' },
+  { id: 'S1-03', name: 'Maliha Designs', tags: ['Fashion storefront', 'Occasion wear'], group: 'S1' },
+  { id: 'S1-04', name: 'Rahul Impex', tags: ['Online storefront', 'Dry fruits retail'], group: 'S1' },
+  { id: 'S1-05', name: 'Dev Tours & Travels', tags: ['Tour package site', 'Travel agency'], group: 'S1' },
+  { id: 'S1-06', name: 'Onyx Technologies LLC', tags: ['Lead-generation website', 'Payroll and staffing'], group: 'S1' },
+  { id: 'S2-01', name: 'Slotly AI', tags: ['Booking platform', 'Service studio'], group: 'S2' },
+  { id: 'S2-02', name: 'SLA Monitor', tags: ['SLA dashboard', 'IT operations'], group: 'S2' },
+  { id: 'S2-03', name: 'Ultra Doc', tags: ['Document intelligence', 'Freight logistics'], group: 'S2' },
+  { id: 'S2-04', name: 'BillSwift', tags: ['Billing & inventory', 'Retail billing'], group: 'S2' },
+  { id: 'S2-05', name: 'CareerLens', tags: ['Resume & job tracker', 'Job search'], group: 'S2' },
+  { id: 'S3-01', name: 'Card Money', tags: ['Real-time multiplayer app', 'Social gaming'], group: 'S3' },
+  { id: 'S3-02', name: 'Page Pulse', tags: ['URL audit API', 'Web tooling'], group: 'S3' },
+  { id: 'S3-03', name: 'Extroverts', tags: ['Mobile signup flow', 'Social events'], group: 'S3' },
+  { id: 'S3-04', name: 'Slotly AI: Under the Hood', tags: ['Booking platform', 'Engineering'], group: 'S3' },
+  { id: 'S3-05', name: 'Ultra Doc: Under the Hood', tags: ['Document intelligence', 'Engineering'], group: 'S3' },
+  { id: 'S3-06', name: 'SLA Monitor: Under the Hood', tags: ['SLA dashboard', 'Engineering'], group: 'S3' },
 ];
+
+export const projects = list.map((p) => ({ ...p, video: `/work/${p.id}.mp4`, img: `/work/${p.id}.jpg` }));

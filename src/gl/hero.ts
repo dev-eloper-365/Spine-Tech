@@ -1,6 +1,6 @@
 import { Renderer, Camera, Transform, Plane, Program, Mesh } from 'ogl';
 
-// A spine-shaped surface (three vertebrae on one axis) with a moving data texture,
+// A surface in the shape of the Spine Technologies logo (11 rounded bars) with a moving data texture,
 // a tile-glitch that reacts to scroll speed, and an iridescent rim.
 
 const vertex = /* glsl */ `
@@ -37,12 +37,20 @@ float noise(vec2 p) {
 }
 float fbm(vec2 p) { float v = 0., a = .5; for (int i = 0; i < 5; i++) { v += a * noise(p); p *= 2.02; a *= .5; } return v; }
 float sdBox(vec2 p, vec2 b, float r) { vec2 q = abs(p) - b + r; return length(max(q, 0.)) + min(max(q.x, q.y), 0.) - r; }
-float smin(float a, float b, float k) { float h = clamp(.5 + .5 * (b - a) / k, 0., 1.); return mix(b, a, h) - k * h * (1. - h); }
 float shape(vec2 p) {
-  float d = sdBox(p - vec2(0., .6), vec2(.5, .2), .2);
-  d = smin(d, sdBox(p, vec2(.86, .22), .22), .16);
-  d = smin(d, sdBox(p + vec2(0., .6), vec2(.5, .2), .2), .16);
-  d = smin(d, sdBox(p, vec2(.09, .97), .09), .14);
+  // the Spine Technologies logo: 11 rounded bars on a curved axis
+  float d = 1e3;
+  d = min(d, sdBox(p - vec2(0.1190, 0.9291), vec2(0.0781, 0.0409), 0.0409));
+  d = min(d, sdBox(p - vec2(-0.0026, 0.7819), vec2(0.1177, 0.0550), 0.0550));
+  d = min(d, sdBox(p - vec2(-0.0857, 0.6104), vec2(0.1548, 0.0704), 0.0704));
+  d = min(d, sdBox(p - vec2(-0.1292, 0.4069), vec2(0.2086, 0.0819), 0.0819));
+  d = min(d, sdBox(p - vec2(-0.1024, 0.1920), vec2(0.2124, 0.0819), 0.0819));
+  d = min(d, sdBox(p - vec2(0.0051, -0.0205), vec2(0.2150, 0.0819), 0.0819));
+  d = min(d, sdBox(p - vec2(0.0883, -0.2316), vec2(0.2188, 0.0806), 0.0806));
+  d = min(d, sdBox(p - vec2(0.1280, -0.4402), vec2(0.2099, 0.0793), 0.0793));
+  d = min(d, sdBox(p - vec2(0.0998, -0.6296), vec2(0.1561, 0.0614), 0.0614));
+  d = min(d, sdBox(p - vec2(0.0307, -0.7896), vec2(0.1203, 0.0499), 0.0499));
+  d = min(d, sdBox(p - vec2(-0.0896, -0.9291), vec2(0.0793, 0.0409), 0.0409));
   return d;
 }
 

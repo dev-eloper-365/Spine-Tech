@@ -166,3 +166,8 @@ Run: `npm run dev` (http://localhost:5173). Build: `npm run build` -> dist/.
   uv -= vel*0.5/aspect, off = vel*0.1. Sim covers the full window; the title reads velocity at its screen position.
 - src/gl/title.ts rewritten with these values (own code, OGL). Text canvas is now opaque white, no padding.
 - Cursor dot is 18px (reference: 90px white box, clip-path circle(10%), difference blend).
+- 2026-11-14: Owner logo in place of the old mark: `#mark` symbol (11 rounded bars, square viewBox), favicon
+  (black, white in dark mode), hero WebGL shape (`shape()` in src/gl/hero.ts). Featured Work now lists the 17 real
+  case-study films (src/data.ts; web copies 1280x720 in public/work/<id>.mp4 + poster .jpg, from POW_Demos exports v3).
+  Card view: muted preview on hover; click opens the film with sound in a <dialog>. Footer Work column uses real names.
+  Not deployed and not committed yet.

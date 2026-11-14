@@ -1,6 +1,6 @@
 import './styles/main.css';
 import Lenis from 'lenis';
-import { projects } from './data';
+import { groups, projects } from './data';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T;
@@ -22,14 +22,40 @@ $$<HTMLAnchorElement>('a[href^="#"]').forEach((a) =>
 const list = $('#projects');
 list.innerHTML = projects
   .map(
-    (p) => `<a class="card" href="#contact" data-img="${p.img}">
-  <div class="thumb"><img src="${p.img}" alt="${p.name} project" loading="lazy"></div>
+    (p) => `<a class="card" href="${p.video}" data-img="${p.img}" data-video="${p.video}" data-name="${p.name}">
+  <div class="thumb"><img src="${p.img}" alt="${p.name} case study" loading="lazy"><video muted playsinline loop preload="none" poster="${p.img}"></video><span class="play" aria-hidden="true">▶</span></div>
   <span class="row-name">${p.name}</span>
-  <div class="meta"><ul class="pills">${p.tags.map((t) => `<li>${t}</li>`).join('')}</ul><span class="date">${p.date === 'Ongoing' ? 'Ongoing' : `Completed: ${p.date}`}</span></div>
+  <div class="meta"><ul class="pills">${p.tags.map((t) => `<li>${t}</li>`).join('')}</ul><span class="date">${groups[p.group]}</span></div>
   <span class="name">${p.name} <i>→</i></span>
 </a>`,
   )
   .join('');
+
+/* Card view: a muted preview plays on hover. Any view: a click opens the film with sound in a dialog. */
+const player = $<HTMLDialogElement>('.player');
+const playerVideo = $<HTMLVideoElement>('video', player);
+const closePlayer = () => player.close();
+player.addEventListener('close', () => { playerVideo.pause(); playerVideo.removeAttribute('src'); playerVideo.load(); lenis.start(); });
+player.addEventListener('click', (e) => { if (e.target === player) closePlayer(); });
+$('.player-close', player).addEventListener('click', closePlayer);
+$$<HTMLAnchorElement>('.card', list).forEach((c) => {
+  const v = $<HTMLVideoElement>('video', c);
+  c.addEventListener('mouseenter', () => {
+    if (list.dataset.view !== 'card' || !matchMedia('(hover: hover)').matches) return;
+    if (!v.src) v.src = c.dataset.video!;
+    v.play().catch(() => {});
+  });
+  c.addEventListener('mouseleave', () => { v.pause(); });
+  c.addEventListener('click', (e) => {
+    e.preventDefault();
+    v.pause();
+    $('.player-title', player).textContent = c.dataset.name!;
+    playerVideo.src = c.dataset.video!;
+    lenis.stop();
+    player.showModal();
+    playerVideo.play().catch(() => {});
+  });
+});
 
 const hoverImg = $('.hover-img');
 const hoverImgEl = $<HTMLImageElement>('img', hoverImg);
