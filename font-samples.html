@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Display Font Samples</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@800&family=Geist:wght@500;600;700;800;900&family=Geist+Mono:wght@500;600&family=Inter+Tight:wght@600;700;800;900&family=Onest:wght@600;700;800;900&family=Hanken+Grotesk:wght@600;700;800;900&family=Schibsted+Grotesk:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900&f[]=general-sans@500,600,700&display=swap">
+<style>
+  :root {
+    --black: #000; --white: #fff; --grey: #f5f5f5; --line: #e2e2e2; --muted: #737373;
+    --sans: 'Geist', Arial, sans-serif;
+    --mono: 'Geist Mono', ui-monospace, monospace;
+    --pad: 40px;
+  }
+  @media (max-width: 900px) { :root { --pad: 16px; } }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans); font-size: 14px; font-weight: 500; line-height: 1.5;
+    letter-spacing: -.02em; color: var(--black); background: var(--white);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .label { font-family: var(--mono); font-size: 11px; font-weight: 600; line-height: 1; letter-spacing: 0; text-transform: uppercase; }
+
+  header {
+    position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line); padding: 16px var(--pad);
+    display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center;
+  }
+  header h1 { font-size: 16px; font-weight: 600; letter-spacing: -.04em; margin-right: auto; }
+  .ctrl { display: flex; align-items: center; gap: 10px; }
+  .ctrl input[type=text] {
+    font: inherit; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; width: 220px; max-width: 100%;
+  }
+  .ctrl input[type=range] { width: 120px; accent-color: #000; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .seg button { font: inherit; font-size: 12px; font-weight: 600; border: 0; background: none; padding: 6px 12px; cursor: pointer; }
+  .seg button[aria-pressed=true] { background: #000; color: #fff; }
+  .val { font-family: var(--mono); font-size: 11px; min-width: 52px; }
+
+  main { padding: 0 var(--pad) 80px; }
+  .sample { border-bottom: 1px solid var(--line); padding: 40px 0 48px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; margin-bottom: 20px; }
+  .meta .name { font-size: 20px; font-weight: 600; letter-spacing: -.04em; }
+  .meta .tag { padding: 5px 9px; border-radius: 999px; background: var(--grey); }
+  .meta .tag.current { background: #000; color: #fff; }
+  .meta .note { color: var(--muted); font-size: 14px; flex-basis: 100%; }
+
+  .hero {
+    font-size: clamp(56px, 10.5vw, 168px); line-height: .95; letter-spacing: var(--trk, -.04em);
+    font-weight: var(--wght, 900); overflow-wrap: anywhere;
+  }
+  .hero span { display: block; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px; align-items: end; }
+  @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
+  .h-lg { font-size: clamp(40px, 5.56vw, 80px); line-height: .95; letter-spacing: var(--trk, -.04em); font-weight: var(--wght, 900); }
+  .glyphs { font-size: clamp(40px, 5.56vw, 80px); line-height: 1; letter-spacing: 0; font-weight: var(--wght, 900); background: var(--grey); border-radius: 12px; padding: 20px 24px; overflow-wrap: anywhere; }
+  .glyphs small { display: block; margin-bottom: 12px; }
+  .body-pair { max-width: 560px; font-size: 16px; line-height: 1.45; margin-top: 24px; }
+  .body-pair u { font-weight: 600; text-underline-offset: 2px; }
+  @media print {
+    @page { size: A4 landscape; margin: 12mm; }
+    header { position: static; backdrop-filter: none; }
+    header .ctrl { display: none; }
+    .sample { break-inside: avoid; page-break-inside: avoid; }
+    .sample { padding: 20px 0 24px; }
+    .meta { margin-bottom: 10px; }
+    .hero { font-size: 84px; }
+    .row { margin-top: 16px; gap: 24px; }
+    .h-lg, .glyphs { font-size: 40px; }
+    .glyphs { padding: 14px 18px; }
+    .body-pair { font-size: 13px; margin-top: 12px; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Display font samples: Spine Tech</h1>
+  <label class="ctrl"><span class="label">Text</span><input id="txt" type="text" value="Spine Technologies"></label>
+  <div class="ctrl"><span class="label">Weight</span>
+    <div class="seg" id="wght">
+      <button data-w="700">700</button><button data-w="800">800</button><button data-w="900" aria-pressed="true">900</button>
+    </div>
+  </div>
+  <label class="ctrl"><span class="label">Tracking</span><input id="trk" type="range" min="-8" max="0" step="0.5" value="-4"><span class="val" id="trkv">-.04em</span></label>
+</header>
+
+<main id="list"></main>
+
+<script>
+  const fonts = [
+    { name: 'Funnel Display', fam: "'Funnel Display'", src: 'Current headline font', note: 'For reference: look at the square notches in p, n, h and g. These are what you want to remove.', current: true, fixedW: 800 },
+    { name: 'Geist', fam: "'Geist'", src: 'Google Fonts / Fontsource', note: 'Option 0: the body font you already use, at heavy weight. No extra font to load.' },
+    { name: 'Inter Tight', fam: "'Inter Tight'", src: 'Google Fonts / Fontsource', note: 'Closest to Geist; neutral and tight.' },
+    { name: 'Onest', fam: "'Onest'", src: 'Google Fonts / Fontsource', note: 'Very similar to Geist, slightly friendlier.' },
+    { name: 'Satoshi', fam: "'Satoshi'", src: 'Fontshare (free)', note: 'Modern grotesk with smooth joins.' },
+    { name: 'General Sans', fam: "'General Sans'", src: 'Fontshare (free)', note: 'Wider and premium-looking. Max weight is 700.' },
+    { name: 'Hanken Grotesk', fam: "'Hanken Grotesk'", src: 'Google Fonts / Fontsource', note: 'Compact and punchy.' },
+    { name: 'Schibsted Grotesk', fam: "'Schibsted Grotesk'", src: 'Google Fonts / Fontsource', note: 'Heavy and round; closest to Funnel Display’s chunkiness.' },
+    { name: 'Plus Jakarta Sans', fam: "'Plus Jakarta Sans'", src: 'Google Fonts / Fontsource', note: 'Geometric and soft. Max weight is 800.' },
+  ];
+
+  const list = document.getElementById('list');
+  const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  list.innerHTML = fonts.map((f, i) => `
+    <section class="sample" style="font-family:${f.fam}, var(--sans);${f.fixedW ? `--wght:${f.fixedW};` : ''}" ${f.fixedW ? 'data-fixed' : ''}>
+      <div class="meta" style="font-family:var(--sans)">
+        <span class="label">${String(i).padStart(2, '0')}</span>
+        <span class="name">${f.name}</span>
+        <span class="label tag ${f.current ? 'current' : ''}">${f.current ? 'Current' : f.src}</span>
+        <span class="note">${f.note}</span>
+      </div>
+      <h2 class="hero" data-hero></h2>
+      <div class="row">
+        <div>
+          <p class="h-lg"><span style="display:block">Featured</span><span style="display:block">Work</span></p>
+          <p class="body-pair" style="font-family:var(--sans)">Body copy stays in Geist. Welcome to Spine Tech. We are a team that solves hardware and software problems for companies and agencies. <u>Reach out here</u>.</p>
+        </div>
+        <div class="glyphs"><small class="label" style="font-family:var(--mono)">Check the joins</small>p n h m g b d q r u</div>
+      </div>
+    </section>`).join('');
+
+  const txt = document.getElementById('txt');
+  const renderText = () => {
+    const words = (txt.value.trim() || 'Spine Technologies').split(/\s+/);
+    document.querySelectorAll('[data-hero]').forEach(el => el.innerHTML = words.map(w => `<span>${esc(w)}</span>`).join(''));
+  };
+  txt.addEventListener('input', renderText);
+  renderText();
+
+  document.querySelectorAll('#wght button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#wght button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    document.querySelectorAll('.sample:not([data-fixed])').forEach(s => s.style.setProperty('--wght', b.dataset.w));
+  }));
+
+  const trk = document.getElementById('trk'), trkv = document.getElementById('trkv');
+  trk.addEventListener('input', () => {
+    const v = (trk.value / 100) + 'em';
+    trkv.textContent = v.replace('0.', '.').replace('-0.', '-.');
+    document.documentElement.style.setProperty('--trk', v);
+  });
+</script>
+</body>
+</html>

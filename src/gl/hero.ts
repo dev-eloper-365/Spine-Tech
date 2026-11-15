@@ -1,7 +1,7 @@
 import { Renderer, Camera, Transform, Plane, Program, Mesh } from 'ogl';
 
 // A surface in the shape of the Spine Technologies logo (11 rounded bars) with a moving data texture,
-// a tile-glitch that reacts to scroll speed, and an iridescent rim.
+// a tile-glitch that reacts to scroll speed, and a metallic rim (silver on dark, gunmetal on light).
 
 const vertex = /* glsl */ `
 attribute vec3 position;
@@ -27,6 +27,7 @@ precision highp float;
 uniform float uTime;
 uniform float uScroll;
 uniform float uVel;
+uniform float uDark;
 varying vec2 vUv;
 varying float vBend;
 
@@ -57,7 +58,7 @@ float shape(vec2 p) {
 void main() {
   vec2 p = (vUv - .5) * 2.;
   float d = shape(p);
-  if (d > .01) discard;
+  if (d > .045) discard; // leave room outside the shape for the rim's glow
 
   // tile glitch: more tiles move when the page scrolls fast
   vec2 cell = floor(vUv * 16.);
@@ -72,12 +73,27 @@ void main() {
   col *= .82 + .36 * hash(cell);
   col += (hash(vUv * 900. + uTime) - .5) * .12;
 
+  // metallic rim: silver on the dark theme, gunmetal on the light theme.
+  // Bands of light sweep along it as the logo bends and turns, like polished metal.
   float rim = smoothstep(-.026, -.008, d);
-  vec3 irid = .55 + .45 * cos(6.2831 * (vUv.x * .8 + vUv.y * .6 + vBend * 3. + uTime * .08 + vec3(0., .33, .67)));
-  col = mix(col, irid, rim);
-  col = mix(col, vec3(.1, .1, .25), smoothstep(-.006, -.001, d));
+  float sweep = vUv.x * .8 + vUv.y * .6 + vBend * 3. + uTime * .05;
+  float band = .5 + .5 * cos(6.2831 * sweep * 1.4);
+  float spec = pow(band, 8.) + .6 * pow(.5 + .5 * cos(6.2831 * (sweep * 3.1 + .37)), 20.);
+  float glint = pow(.5 + .5 * cos(6.2831 * (sweep * .9 - uTime * .18)), 60.); // a sharp flash that travels round the rim
+  float bevel = sin(clamp((d + .026) / .02, 0., 1.) * 3.1416); // brighter across the middle of the rim
+  vec3 silver = mix(vec3(.70, .72, .76), vec3(1.), band) + (spec * .6 + glint * 1.2);
+  vec3 gunmetal = mix(vec3(.16, .16, .18), vec3(.60, .62, .66), band) + (spec * .7 + glint * 1.1);
+  vec3 metal = mix(gunmetal, silver, uDark) * (.85 + .3 * bevel);
+  col = mix(col, metal, rim);
+  col = mix(col, metal * .8, smoothstep(-.006, -.001, d));
+  float body = 1. - smoothstep(-.004, .006, d);
 
-  gl_FragColor = vec4(col, 1. - smoothstep(-.004, .006, d));
+  // glow just outside the rim, strongest where the light is sweeping past
+  float shine = clamp(.35 + spec * .8 + glint * 1.5, 0., 1.6);
+  float halo = exp(-max(d, 0.) * 70.) * shine * mix(.45, .7, uDark) * (1. - smoothstep(.03, .045, d));
+  vec3 glowCol = mix(vec3(.55, .57, .62), vec3(.95, .97, 1.), uDark);
+  float a = max(body, halo);
+  gl_FragColor = vec4(mix(glowCol, min(col, vec3(1.)), body / max(a, 1e-4)), a);
 }`;
 
 export function createHero(canvas: HTMLCanvasElement, anchor: HTMLElement) {
@@ -89,7 +105,7 @@ export function createHero(canvas: HTMLCanvasElement, anchor: HTMLElement) {
   const scene = new Transform();
   const program = new Program(gl, {
     vertex, fragment, transparent: true, cullFace: false,
-    uniforms: { uTime: { value: 0 }, uScroll: { value: 0 }, uVel: { value: 0 } },
+    uniforms: { uTime: { value: 0 }, uScroll: { value: 0 }, uVel: { value: 0 }, uDark: { value: document.documentElement.dataset.theme === 'dark' ? 1 : 0 } },
   });
   const mesh = new Mesh(gl, { geometry: new Plane(gl, { widthSegments: 48, heightSegments: 48 }), program });
   mesh.setParent(scene);
@@ -119,6 +135,9 @@ export function createHero(canvas: HTMLCanvasElement, anchor: HTMLElement) {
       program.uniforms.uTime.value = t;
       program.uniforms.uScroll.value = progress;
       program.uniforms.uVel.value = vel;
+      // ease the rim between gunmetal and silver when the theme changes
+      const dark = document.documentElement.dataset.theme === 'dark' ? 1 : 0;
+      program.uniforms.uDark.value += (dark - program.uniforms.uDark.value) * 0.12;
       renderer.render({ scene, camera });
     },
   };
