@@ -202,7 +202,8 @@ document.addEventListener('pointerover', (e) => {
 /* ---------- Services: horizontal slides inside a sticky track ---------- */
 const svcTrack = $('.svc-track');
 const slides = $$('.svc', svcTrack);
-const slideVideos = slides.map((el) => $<HTMLVideoElement>('video', el));
+// slides with a still showcase image have no video
+const slideVideos = slides.map((el) => el.querySelector('video'));
 let activeSlide = -1;
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
@@ -317,11 +318,11 @@ function raf(now: number) {
     // only the slide in front plays its film (muted)
     const a = Math.round(p);
     if (a !== activeSlide) {
-      slideVideos.forEach((v, i) => (i === a ? v.play().catch(() => {}) : v.pause()));
+      slideVideos.forEach((v, i) => (i === a ? v?.play().catch(() => {}) : v?.pause()));
       activeSlide = a;
     }
   } else if (activeSlide !== -1) {
-    slideVideos.forEach((v) => v.pause());
+    slideVideos.forEach((v) => v?.pause());
     activeSlide = -1;
   }
 
