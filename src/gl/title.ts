@@ -9,7 +9,7 @@ import { Renderer, Plane, Program, Mesh, Texture, RenderTarget, Transform } from
 
 const OPT = {
   resolution: 0.25, // sim cells per CSS pixel
-  cursorSize: 40, // force disc radius, in cells
+  cursorSize: 35, // force disc radius, in cells (scaled with the dot bubble: 70 / 80 of the first value)
   mouseForce: 120,
   forceDiv: 7,
   viscous: 4,
@@ -143,6 +143,9 @@ uniform sampler2D uVelocity;
 uniform vec4 uRect;   // canvas left, top, width, height (CSS px, viewport)
 uniform vec2 uView;   // viewport width, height
 uniform float uStrength;
+uniform float uMode; // 0: plain text image; 1: dots, dark page; 2: dots, light page
+uniform vec2 uMouse;  // pointer, CSS px, viewport
+uniform float uAway;  // how far the dots image moves away from the pointer
 varying vec2 vUv;
 void main() {
   vec2 screenUV = vec2((uRect.x + vUv.x * uRect.z) / uView.x,
@@ -150,10 +153,35 @@ void main() {
   vec2 vel = texture2D(uVelocity, screenUV).xy / max(uRect.z / uRect.w, 1.);
   vec2 uv = vUv - vel * uStrength;
   vec2 off = vel * uStrength * .2;
-  gl_FragColor = vec4(texture2D(uText, uv - off).r, texture2D(uText, uv).g, texture2D(uText, uv + off).b, 1.);
+  if (uMode > .5) {
+    // dots: use only the flow's strength, never its direction. Each point moves straight
+    // away from the pointer, a little, so nothing is ever pulled towards it or dragged after it.
+    vec2 P = vec2(uRect.x + vUv.x * uRect.z, uRect.y + (1. - vUv.y) * uRect.w);
+    vec2 d = P - uMouse;
+    float dist = max(length(d), 1.);
+    // never sample from past the pointer: that would show content from its other side
+    float amt = min(length(vel) * uStrength * uRect.w * uAway, dist * .8);
+    vec2 duv = vec2(d.x, -d.y) / dist * amt / uRect.zw;
+    uv = vUv - duv;
+    off = duv * .25;
+  }
+  if (uMode < .5) {
+    gl_FragColor = vec4(texture2D(uText, uv - off).r, texture2D(uText, uv).g, texture2D(uText, uv + off).b, 1.);
+    return;
+  }
+  // dots: the image holds only coverage (alpha), so both themes split it the same way
+  vec3 a = vec3(texture2D(uText, uv - off).a, texture2D(uText, uv).a, texture2D(uText, uv + off).a);
+  // dark page: white ink on black, red / green / blue edges (the canvas blends with 'screen')
+  // light page: black ink on white, the SAME red / green / blue edges (the canvas blends with 'multiply'):
+  //   ground = 1 - max coverage, plus the colour part of the edge (a - min)
+  float hi = max(a.r, max(a.g, a.b)), lo = min(a.r, min(a.g, a.b));
+  vec3 c = uMode < 1.5 ? a : vec3(1. - hi) + (a - lo);
+  gl_FragColor = vec4(c, 1.);
 }`;
 
-export function createTitle(title: HTMLElement, host: HTMLElement) {
+// `dots`: the dotted title. When given, the liquid moves the dots image instead of plain text,
+// over the same (larger than the hero) area as the dot canvas, so pushed dots are never cut.
+export function createTitle(title: HTMLElement, host: HTMLElement, dots?: { canvas: HTMLCanvasElement; readonly version: number }) {
   const canvas = document.createElement('canvas');
   canvas.className = 'title-gl';
   canvas.setAttribute('aria-hidden', 'true');
@@ -221,17 +249,18 @@ export function createTitle(title: HTMLElement, host: HTMLElement) {
 
   const displayProgram = new Program(gl, {
     vertex: displayVert, fragment: displayFrag, depthTest: false, depthWrite: false, cullFace: false,
-    uniforms: { uText: { value: tText }, uVelocity: { value: null }, uRect: { value: [0, 0, 1, 1] }, uView: { value: [1, 1] }, uStrength: { value: OPT.fluidStrength } },
+    uniforms: { uText: { value: tText }, uVelocity: { value: null }, uRect: { value: [0, 0, 1, 1] }, uView: { value: [1, 1] }, uStrength: { value: OPT.fluidStrength }, uMode: { value: 0 }, uMouse: { value: [-1e5, -1e5] }, uAway: { value: 0.3 } },
   });
   const display = new Mesh(gl, { geometry: quad, program: displayProgram });
 
   const run = (p: Pass | Mesh, target: RenderTarget) =>
     renderer.render({ scene: 'mesh' in p ? p.mesh : p, target, clear: false });
 
+  let drawn = -1;
   // ---- layout + title image (black text on white, like the reference PNG) ----
   function layout() {
     const hb = host.getBoundingClientRect();
-    const tb = title.getBoundingClientRect();
+    const tb = dots ? dots.canvas.getBoundingClientRect() : title.getBoundingClientRect();
     const box = { x: tb.left - hb.left, y: tb.top - hb.top, w: tb.width, h: tb.height };
     Object.assign(canvas.style, { left: `${box.x}px`, top: `${box.y}px`, width: `${box.w}px`, height: `${box.h}px` });
     renderer.setSize(box.w, box.h);
@@ -240,6 +269,16 @@ export function createTitle(title: HTMLElement, host: HTMLElement) {
     textCanvas.height = Math.round(box.h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const page = getComputedStyle(document.body);
+    if (dots) {
+      // coverage only: transparent ground, the dots' alpha is what the shader reads
+      displayProgram.uniforms.uMode.value = document.documentElement.dataset.theme === 'dark' ? 1 : 2;
+      ctx.clearRect(0, 0, box.w, box.h);
+      ctx.drawImage(dots.canvas, 0, 0, box.w, box.h);
+      drawn = dots.version;
+      tText.image = textCanvas;
+      tText.needsUpdate = true;
+      return;
+    }
     ctx.fillStyle = page.backgroundColor;
     ctx.fillRect(0, 0, box.w, box.h);
     const cs = getComputedStyle(title);
@@ -263,6 +302,7 @@ export function createTitle(title: HTMLElement, host: HTMLElement) {
   const coords = [0, 0], old = [0, 0];
   let seen = false;
   addEventListener('pointermove', (e) => {
+    displayProgram.uniforms.uMouse.value = [e.clientX, e.clientY];
     coords[0] = (e.clientX / innerWidth) * 2 - 1;
     coords[1] = -((e.clientY / innerHeight) * 2 - 1);
     if (!seen) { old[0] = coords[0]; old[1] = coords[1]; seen = true; }
@@ -276,7 +316,11 @@ export function createTitle(title: HTMLElement, host: HTMLElement) {
     requestAnimationFrame(() => { resizeQueued = false; buildTargets(); layout(); });
   });
   layout();
-  title.classList.add('gl-on');
+  if (dots) {
+    // the liquid canvas shows the dots now; it blends with the page so text under it stays visible
+    canvas.classList.add('over-dots');
+    dots.canvas.style.visibility = 'hidden';
+  } else title.classList.add('gl-on');
 
   return {
     frame() {
@@ -285,6 +329,14 @@ export function createTitle(title: HTMLElement, host: HTMLElement) {
 
       const r = canvas.getBoundingClientRect();
       if (r.bottom < 0 || r.top > innerHeight) return;
+      // the dots moved: copy their new frame into the texture
+      if (dots && dots.version !== drawn) {
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, r.width, r.height);
+        ctx.drawImage(dots.canvas, 0, 0, r.width, r.height);
+        drawn = dots.version;
+        tText.needsUpdate = true;
+      }
 
       // 1. carry the velocity along itself
       advect.program.uniforms.uVelocity.value = vel0.texture;

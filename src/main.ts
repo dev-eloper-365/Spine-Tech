@@ -1,6 +1,7 @@
 import './styles/main.css';
 import Lenis from 'lenis';
 import { groups, projects } from './data';
+import { createTitleDots } from './title-dots';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T;
@@ -176,7 +177,16 @@ function fit() {
     h.style.fontSize = '100px';
     const w = Math.max(...$$('.line', h).map((l) => l.scrollWidth));
     const avail = h.parentElement!.clientWidth - parseFloat(getComputedStyle(h.parentElement!).paddingLeft) * 2;
-    h.style.fontSize = `${(100 * avail) / w}px`;
+    let size = (100 * avail) / w;
+    // hero title: on a short window, also fit the height, so its top stays below the header
+    if (h.classList.contains('hero-title')) {
+      const hero = h.parentElement!, intro = $('.hero-intro', hero);
+      const room = hero.offsetTop + hero.clientHeight - parseFloat(getComputedStyle(hero).paddingBottom)
+        - intro.offsetHeight - parseFloat(getComputedStyle(intro).marginTop) - header.offsetHeight - 24;
+      const tall = (h.offsetHeight * size) / 100;
+      if (tall > room) size *= room / tall;
+    }
+    h.style.fontSize = `${size}px`;
   });
 
 }
@@ -262,12 +272,21 @@ $$('.mag').forEach((el) => {
 
 /* ---------- WebGL (lazy) ---------- */
 let heroGL: { frame: (t: number, v: number) => void } | null = null;
+let titleDots: { frame: () => void } | null = null;
 let titleGL: { frame: (t: number) => void } | null = null;
-// liquid title: start after the preloader and the title rise-in, only for mouse users
-if (!reduced && matchMedia('(hover: hover)').matches) {
-  const startTitle = () => setTimeout(async () => {
-    titleGL = (await import('./gl/title')).createTitle($('.hero-title'), $('.hero'));
-  }, 1400);
+// dotted title: the dots gather when the preloader leaves; the pointer scatters them
+{
+  const startTitle = async () => {
+    await document.fonts.load('900 100px Respira');
+    fit();
+    const mouse = !reduced && matchMedia('(pointer: fine)').matches;
+    const dots = createTitleDots($('.hero-title'), $('.hero'), { interactive: mouse, intro: !reduced });
+    titleDots = dots;
+    // liquid flow over the dots: start when the dots have gathered, only for mouse users
+    if (mouse) setTimeout(async () => {
+      titleGL = (await import('./gl/title')).createTitle($('.hero-title'), $('.hero'), dots);
+    }, 1400);
+  };
   if (document.body.classList.contains('ready')) startTitle();
   else new MutationObserver((_, o) => { if (document.body.classList.contains('ready')) { o.disconnect(); startTitle(); } })
     .observe(document.body, { attributes: true, attributeFilter: ['class'] });
@@ -335,6 +354,7 @@ function raf(now: number) {
   }
 
   heroGL?.frame(now / 1000, v);
+  titleDots?.frame();
   titleGL?.frame(now / 1000);
   requestAnimationFrame(raf);
 }

@@ -6,6 +6,14 @@
 @import '@fontsource-variable/geist-mono/wght.css';
 @import '@fontsource-variable/funnel-display/wght.css';
 
+/* Respira Black (Sharp Type), used only for the hero title. File supplied by the owner, who holds the web licence. */
+@font-face {
+  font-family: 'Respira';
+  src: url('/fonts/Respira-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-display: block;
+}
+
 :root {
   --pad: 40px;
   --black: #000;
@@ -145,8 +153,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero-intro { max-width: 560px; margin-top: 16px; font-size: var(--fs-body); line-height: var(--lh-body); }
 @media (max-width: 900px) { .hero-spinner { width: 120px; height: 120px; top: -20px; } }
 
+/* Hero title only: Respira, a blackletter. Its tall ascenders need a little more line height. */
+.hero-title { font-family: 'Respira', var(--display); font-weight: 900; letter-spacing: 0; line-height: 1.18; }
+.hero-title .line { padding-right: 0; }
+/* the dot canvas draws the title; the DOM text stays for layout and screen readers */
+.title-dots { position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none; }
+/* liquid over the dots: its page-coloured ground disappears in the blend, so text under it stays visible */
 .title-gl { position: absolute; z-index: 1; pointer-events: none; }
+.title-gl.over-dots { mix-blend-mode: multiply; }
+:root[data-theme='dark'] .title-gl.over-dots { mix-blend-mode: screen; }
 .hero-title.gl-on { color: transparent; }
+.hero-title.dots-on { -webkit-text-fill-color: transparent; }
 
 /* ---------- WebGL stage ---------- */
 .gl-stage { position: relative; height: 1008px; display: grid; place-items: center; }
